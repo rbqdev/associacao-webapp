@@ -1,0 +1,212 @@
+<ion-header>
+
+    <ion-navbar color="primary">
+
+        <ion-title>{{title_page}}</ion-title>
+
+        <ion-buttons end>
+            <button ion-button icon-only color="branco" (click)="modal_dismiss()">
+                <ion-icon name="close"></ion-icon>
+            </button>
+        </ion-buttons>
+
+    </ion-navbar>
+
+</ion-header>
+
+
+<ion-content class="form-modal">
+
+    <!-- Formulario de Pagamento -->
+    <section *ngIf="requisicao_modal === 'pagamento'" class="form form-pagamento">
+
+        <p class="alert-required"><small>Campos com <span class="obrigatorio">*</span> são obrigatórios.</small></p>
+
+        <ion-item class="form-group">
+            <ion-label>Valor: <span class="obrigatorio">*</span></ion-label>
+            <ion-input type="tel" [(ngModel)]="pagamento.valor" [textMask]="{mask: valorPagamentoMask}" placeholder="100,00" class="pagamento-valor" ></ion-input>
+        </ion-item>
+
+        <ion-item class="form-group">
+            <ion-label>Tipo do Pagamento: <span class="obrigatorio">*</span></ion-label>
+            <ion-select [(ngModel)]="pagamento.tipo_pagamento" >
+                <ion-option value="matricula">Matricula</ion-option>
+                <ion-option value="mensalidade">Mensalidade</ion-option>
+            </ion-select>
+        </ion-item>
+
+        <ion-item class="form-group meses">
+            <ion-label>Mês referente: <span class="obrigatorio">*</span></ion-label>
+            <ion-select [(ngModel)]="pagamento.mes" class="meses">
+                <ng-template ngFor [ngForOf]="meses" let-mes>
+                    <ion-option value="{{mes}}">{{ mes | uppercase}}</ion-option>
+                </ng-template>
+            </ion-select>
+        </ion-item>
+
+        <ion-item class="form-group">
+            <ion-label>Ano referente: <span class="obrigatorio">*</span></ion-label>
+            <ion-datetime [(ngModel)]="pagamento.ano" displayFormat="YYYY" min="2017" max="2030"></ion-datetime>
+        </ion-item>
+
+        <ion-item-group class="form-group" *ngIf="requisicao === 'adicionar'">
+            <ion-label>
+                Compravante do Pagamento <span class="obrigatorio">*</span>
+            </ion-label>
+
+            <div class="form-group-childs form-group-files">
+
+                <div class="form-group-file">
+                    <input type="file" id="comprovante-pagamento" class="imagem" accept=".png,.jpg" (change)="console_imagem( 'comprovante-pagamento' )" accept="image/*" />
+                    <label ion-button icon-left for="comprovante-pagamento">
+                        <ion-icon name="image" item-left></ion-icon> Escolha uma imagem
+                    </label>
+                </div>
+
+            </div>
+        </ion-item-group>
+
+        <div *ngIf="requisicao === 'editar'">
+            <p class="text-muted">Marque a caixa caso deseje alterar a imagem de comprovante deste pagamento</p>
+            <ion-item-group class="form-group">
+                <ion-label>Alterar Imagem?</ion-label>
+                <div class="form-group-childs">
+                    <ion-item>
+                        <ion-checkbox [(ngModel)]="alterarImagem"></ion-checkbox>
+                    </ion-item>
+                </div>
+            </ion-item-group>
+            <ion-item-group class="form-group" *ngIf="alterarImagem">
+                <ion-label>
+                    Compravante do Pagamento <span class="obrigatorio">*</span>
+                </ion-label>
+                <div class="form-group-childs form-group-files">
+                        
+                    <div class="form-group-file">
+                        <input type="file" id="comprovante-pagamento" class="imagem" accept=".png,.jpg" (change)="console_imagem( 'comprovante-pagamento' )" accept="image/*" />
+                        <label ion-button icon-left for="comprovante-pagamento">
+                            <ion-icon name="image" item-left></ion-icon> Escolha uma imagem
+                        </label>
+                    </div>
+    
+                </div>
+            </ion-item-group>
+        </div>
+
+        <button ion-button round icon-left class="btn btn-block" (click)="salvar_pagamento(pagamento)">
+            <ion-icon name="checkmark-circle-outline"></ion-icon> Salvar
+        </button>
+    </section>
+
+    <!-- Comprovante de Pagamento -->
+    <section *ngIf="requisicao_modal === 'comprovante_pagamento'" class="modal-comprovante">
+
+        <div class="comprovante-pagamento__container">
+            <img src="{{url_imagem}}" alt="Comprovante de Pagamento" />
+        </div>
+
+    </section>
+
+    <!-- Formulario de Documentos -->
+    <section *ngIf="requisicao_modal === 'documento'" class="form form-documento">
+
+        <p class="alert-required"><small>Campos com <span class="obrigatorio">*</span> são obrigatórios.</small></p>
+
+        <ion-item class="form-group">
+            <ion-label>Tipo do Documento:</ion-label>
+            <ion-select [(ngModel)]="documento.tipo_documento">
+                <ion-option value="rg">RG</ion-option>
+                <ion-option value="cpf">CPF</ion-option>
+                <ion-option value="comprovante-de-matricula">Comprovante de Matricula</ion-option>
+                <ion-option value="comprovante-de-residencia">Comprovante de Residencia</ion-option>
+                <ion-option value="carteira-de-motorista">Comprovante de Residencia</ion-option>
+                <ion-option value="outro">Outro</ion-option>
+            </ion-select>
+        </ion-item>
+
+        <ion-item class="form-group textarea-70" *ngIf="documento.tipo_documento === 'outro'">
+            <ion-label>Descrição do Documento:</ion-label>
+            <ion-textarea [(ngModel)]="documento.documento_desc"></ion-textarea>
+        </ion-item>
+
+        <ion-item-group class="form-group" *ngIf="requisicao === 'adicionar'">
+            <ion-label>
+                Imagem do Documento <span class="obrigatorio">*</span>
+            </ion-label>
+
+            <div class="form-group-childs form-group-files">
+
+                <div class="form-group-file">
+                    <input type="file" id="comprovante-documento" class="imagem" accept=".png,.jpg" (change)="console_imagem( 'comprovante-documento' )" accept="image/*" />
+                    <label ion-button icon-left for="comprovante-documento">
+                        <ion-icon name="image" item-left></ion-icon> Escolha uma imagem
+                    </label>
+                </div>
+            </div>
+        </ion-item-group>
+
+        <div *ngIf="requisicao === 'editar'">
+            <p class="text-muted">Marque a caixa caso deseje alterar a imagem deste documento</p>
+            <ion-item-group class="form-group">
+                <ion-label>Alterar imagem do documento?</ion-label>
+                <div class="form-group-childs">
+                    <ion-item>
+                        <ion-checkbox [(ngModel)]="alterarImagem"></ion-checkbox>
+                    </ion-item>
+                </div>
+            </ion-item-group>
+            <ion-item-group class="form-group" *ngIf="alterarImagem">
+                <ion-label>
+                    Adicionar uma nova foto
+                </ion-label>
+                <div class="form-group-childs form-group-files">
+                    <div class="form-group-file">
+                        <input type="file" id="comprovante-documento" class="imagem" accept=".png,.jpg" (change)="console_imagem( 'comprovante-documento' )" accept="image/*" />
+                        <label ion-button icon-left for="comprovante-documento">
+                            <ion-icon name="image" item-left></ion-icon> Escolha uma imagem
+                        </label>
+                    </div>
+                </div>
+            </ion-item-group>
+        </div>
+
+        <button ion-button round icon-left class="btn btn-block" (click)="salvar_documento(documento)">
+            <ion-icon name="checkmark-circle-outline"></ion-icon> Salvar
+        </button>
+    </section>
+
+    <!-- Comprovante de Documento -->
+    <section *ngIf="requisicao_modal === 'comprovante_documento'" class="modal-comprovante">
+        <div class="comprovante-documento__container">
+            <img src="{{url_imagem}}" alt="Comprovante de Documento" />
+        </div>
+    </section>
+
+    <!-- ADvertencia -->
+    <section *ngIf="requisicao_modal === 'advertencia'" class="form form-advertencia">
+
+        <p class="alert-required"><small>Campos com <span class="obrigatorio">*</span> são obrigatórios.</small></p>
+
+        <ion-item class="form-group textarea-70">
+            <ion-label>Descrição da Advertência:</ion-label>
+            <ion-textarea [(ngModel)]="advertencia.advertencia" placeholder="Descreeva sobre a advertência..." autofocus></ion-textarea>
+        </ion-item>
+
+        <ion-item-group class="form-group form-group-select">
+            <ion-item>
+                <ion-label>Grau da Advertência:</ion-label>
+                <ion-select [(ngModel)]="advertencia.grau">
+                    <ion-option value="alto">Alto</ion-option>
+                    <ion-option value="medio">Medio</ion-option>
+                    <ion-option value="baixo">Baixo</ion-option>
+                </ion-select>
+            </ion-item>
+            <span class="prioridade {{advertencia.grau}}"></span>
+        </ion-item-group>
+
+        <button ion-button round icon-left class="btn btn-block" (click)="salvar_advertencia(advertencia)">
+            <ion-icon name="checkmark-circle-outline"></ion-icon> Salvar
+        </button>
+    </section>
+
+</ion-content>

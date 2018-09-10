@@ -1,0 +1,45 @@
+<ion-header>
+
+    <ion-navbar color="primary">
+        <ion-title>{{title_page}}</ion-title>
+
+        <ion-buttons end>
+            <button ion-button icon-only color="branco" (click)="modal_dismiss()">
+				<ion-icon name="close"></ion-icon>
+			</button>
+        </ion-buttons>
+    </ion-navbar>
+
+</ion-header>
+
+<ion-content class="form-modal">
+
+    <ion-list *ngIf="requisicao_modal === 'onibus_info_geral'" class="form form-informacoes form-fixed form-dinamic" reorder="true" (ionItemReorder)="reordenarCampo($event)">
+
+        <ion-item-group class="form-group" *ngFor="let item of form_items; let pos = index">
+            <ion-item class="no-wrap textarea-70">
+
+                <ion-label>
+                    Aviso #{{pos + 1}}
+                </ion-label>
+                <ion-textarea placeholder="Digite a informação" [(ngModel)]="model_items[pos]" class="textarea-info"></ion-textarea>
+
+            </ion-item>
+            <button ion-button icon-only outline small class="button-info remove-item" color="danger" (click)="remover_campo( pos )">
+				<ion-icon name="remove-circle"></ion-icon>
+			</button>
+        </ion-item-group>
+
+        <div class="form-group add-more-button">
+            <button ion-button small outline icon-left class="btn btn-right add-more" color="secondary" (click)="adicionar_campo()">
+				<ion-icon name="add"></ion-icon> Adicionar Campo
+			</button>
+        </div>
+
+        <div class="button-fixed">
+            <button ion-button round icon-left class="btn btn-submit" (click)="salvar(model_items)"><ion-icon name="checkmark-circle-outline"></ion-icon> Salvar</button>
+        </div>
+
+    </ion-list>
+
+</ion-content>

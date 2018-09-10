@@ -1,0 +1,332 @@
+<ion-header>
+        <ion-navbar>
+            <ion-title>{{ title_page }}</ion-title>
+            <ion-buttons ion-button end>
+                <button ion-button icon-left (click)="salvar(onibus)">
+                    <ion-icon name="checkmark-circle-outline"></ion-icon>
+                    Salvar
+                </button>
+            </ion-buttons>
+        </ion-navbar>
+    </ion-header>
+    <ion-content class="page-content">
+        <section class="page-content__body">
+            <div class="form-full-page">
+                <div class="form form-onibus form-fixed">
+                    <ion-card>
+                        
+                        <ion-item-divider class="no-m light">
+                            <ion-label>
+                                Informações e Avisos do Onibus
+                            </ion-label>
+                            <button ion-button item-right icon-only clear (click)="toggleShowHideDiv( 'informacoes' )">
+                                <ion-icon name="expand"></ion-icon>
+                            </button>
+                        </ion-item-divider>
+
+                        <div class="informacoes-content" [hidden]="hide_div_informacoes">
+
+                            <p class="alert-required"><small>Campos com <span class="obrigatorio">*</span> são obrigatórios.</small></p>
+
+                            <div class="form-divider contatos">
+                                <p>
+                                    <ion-icon outline name="information-circle"></ion-icon>
+                                    <strong>Informaçoes principais:</strong>
+                                </p>
+                            </div>
+                            <ion-item class="form-group">
+                                <ion-label class="col-2">Nome - Destino Base <span class="obrigatorio">*</span></ion-label>
+                                <ion-input type="text" [(ngModel)]="onibus.title" placeholder="Destino base do onibus. Ex: UESB"></ion-input>
+                            </ion-item>
+                            <ion-item-group class="form-group form-group-select">
+                                <ion-item>
+                                    <ion-label>Status <span class="obrigatorio">*</span></ion-label>
+                                    <ion-select [(ngModel)]="onibus.status" placeholder="Informe status do onibus">
+                                    <ion-option value="onibus_ativo">Ativo</ion-option>
+                                    <ion-option value="onibus_inativo">Inativo</ion-option>
+                                    </ion-select>
+                                </ion-item>
+                                <span class="status {{onibus.status}}"></span>
+                            </ion-item-group>
+                            <ion-item-group class="form-group form-group-select">
+                                <ion-item>
+                                    <ion-label>Turno <span class="obrigatorio">*</span></ion-label>
+                                    <ion-select [(ngModel)]="onibus.turno" placeholder="Informe o turno">
+                                    <ion-option value="matutino">Matutino</ion-option>
+                                    <ion-option value="vespertino">Vespertino</ion-option>
+                                    <ion-option value="noturno">Noturno</ion-option>
+                                    </ion-select>
+                                </ion-item>
+                            </ion-item-group>
+                            <ion-item-group class="form-group form-group-select">
+                                <ion-item>
+                                    <ion-label>Rota Semanal? ou Sábado? <span class="obrigatorio">*</span></ion-label>
+                                    <ion-select [(ngModel)]="onibus.encargo" placeholder="Informe a rotina do onibus">
+                                    <ion-option value="semanal">Semanal</ion-option>
+                                    <ion-option value="sabado">Sábado</ion-option>
+                                    </ion-select>
+                                </ion-item>
+                            </ion-item-group>
+                            <div class="form-divider avisos">
+                                <p>
+                                    <ion-icon outline name="warning"></ion-icon>
+                                    <strong>Avisos:</strong>
+                                    <br />
+                                    <small>Avisos especificos deste onibus</small>
+                                </p>
+                                <p item-end>
+                                    <ion-note>Min: 1- Max: 5</ion-note>
+                                </p>
+                            </div>
+                            <ion-list class="form-multi-groups avisos" reorder="true" (ionItemReorder)="reordenarCampos( $event, 'avisos' )">
+                                <ion-item-group class="form-group" *ngFor="let item of avisos_form; let pos = index">
+                                    <ion-item class="no-wrap textarea-70">
+                                        <ion-label>
+                                            Aviso - {{pos + 1}}
+                                        </ion-label>
+                                        <ion-textarea placeholder="Digite o aviso" [(ngModel)]="avisos_model[pos]" class="textarea-info"></ion-textarea>
+                                    </ion-item>
+                                    <button ion-button outline small class="button-info remove-item" color="danger" (click)="remover_campo_texto( pos, 'avisos' )">
+                                        <ion-icon name="remove-circle"></ion-icon>
+                                    </button>
+                                </ion-item-group>
+                                <div class="form-group add-more-button">
+                                    <button ion-button small outline icon-left class="btn btn-right add-more" color="secondary" (click)="adicionar_campo_texto( 'avisos' )">
+                                        <ion-icon name="add"></ion-icon>
+                                        Adicionar Campo
+                                    </button>
+                                </div>
+                            </ion-list>
+                            <ion-list class="form-multi-groups">
+                                <div class="form-divider contatos">
+                                    <p>
+                                        <ion-icon outline name="call"></ion-icon>
+                                        <strong>Contatos:</strong>
+                                    </p>
+                                    <p item-end>
+                                        <ion-note>Min: 1 - Max: 5</ion-note>
+                                    </p>
+                                </div>
+                                <ion-item-group class="form-group form-group-multi-fields" reorder="true" (ionItemReorder)="reordenarCampos( $event, 'contatos' )">
+                                    <div class="ponto-group" *ngFor="let item of contatos_form; let pos = index">
+                                        <ion-label>Contato - {{pos + 1}}<span class="obrigatorio">*</span></ion-label>
+                                        <ion-item class="textarea-70">
+                                            <ion-input class="label-contato" [(ngModel)]="contatos_model[pos].id_contato" placeholder="Descrição* - ex: Numero do onibus, Whatsapp"></ion-input>
+                                            <ion-input class="contato" [textMask]="{mask: telMask}" [(ngModel)]="contatos_model[pos].contato" placeholder="Contato - ex: (77) 90000-0000" (ionBlur)="trimLastCharacter()"></ion-input>
+                                        </ion-item>
+                                        <button ion-button outline small class="button-info remove-item" color="danger" (click)="remover_campo_texto( pos, 'contatos' )">
+                                            <ion-icon name="remove-circle"></ion-icon>
+                                        </button>
+                                    </div>
+                                </ion-item-group>
+                                <div class="form-group add-more-button">
+                                    <button ion-button small outline icon-left class="btn btn-right add-more" color="secondary" (click)="adicionar_campo_texto( 'contatos' )">
+                                        <ion-icon name="add"></ion-icon>
+                                        Adicionar Grupo
+                                    </button>
+                                </div>
+                            </ion-list>
+                            <div class="form-divider contatos">
+                                <p>
+                                    <ion-icon outline name="time"></ion-icon>
+                                    <strong>Horários:</strong>
+                                </p>
+                            </div>
+                            <ion-item-group class="form-group form-group-select">
+                                <ion-item>
+                                    <ion-label class="col-2">Horário de Saida <span class="obrigatorio">*</span></ion-label>
+                                    <ion-datetime displayFormat="HH:mm" pickerFormat="HH:mm" [(ngModel)]="onibus.hora_saida"></ion-datetime>
+                                    <ion-icon name="time" item-right></ion-icon>
+                                </ion-item>
+                            </ion-item-group>
+                            <ion-item-group class="form-group form-group-select">
+                                <ion-item>
+                                    <ion-label class="col-2">Horário de Retorno <span class="obrigatorio">*</span></ion-label>
+                                    <ion-datetime displayFormat="HH:mm" pickerFormat="HH:mm" [(ngModel)]="onibus.hora_retorno"></ion-datetime>
+                                    <ion-icon name="time" item-right></ion-icon>
+                                </ion-item>
+                            </ion-item-group>
+                        </div>
+                    </ion-card>
+
+                    <ion-card class="qtd_rotas">
+                        <ion-item-divider class="no-m light">
+                            <ion-label>
+                                Quantidade de Rotas
+                            </ion-label>
+                            <button ion-button item-right icon-only clear (click)="toggleShowHideDiv( 'qtd_rotas' )">
+                                <ion-icon name="expand"></ion-icon>
+                            </button>
+                        </ion-item-divider>
+                        <div class="qtd-rotas-content" [hidden]="hide_div_qtd_rotas">
+                            <p class="text-muted"><strong>1 Rota:</strong> A mesma rota se aplica a IDA e VOLTA.</p>
+                            <p class="text-muted no-m"><strong>2 Rotas:</strong> Uma rota somente de IDA e outra rota somente de VOLTA.</p>
+                            <ion-item-group class="form-group">
+                                <ion-label>
+                                    Quantidade de Rotas
+                                </ion-label>
+                                <div class="form-group-childs form-group-radio" radio-group [(ngModel)]="onibus.qtd_rotas">
+                                    <ion-item>
+                                        <ion-label>1 Rota</ion-label>
+                                        <ion-radio value="1"></ion-radio>
+                                    </ion-item>
+                                    <ion-item>
+                                        <ion-label>2 Rotas</ion-label>
+                                        <ion-radio checked="true" value="2"></ion-radio>
+                                    </ion-item>
+                                </div>
+                            </ion-item-group>
+                        </div>
+                    </ion-card>
+
+                <ion-card class="rota rota-1">
+                    <ion-item-divider class="no-m light ">
+                        <ion-label>
+                            Rota do Onibus - 1
+                        </ion-label>
+                        <button ion-button item-right icon-only clear (click)="toggleShowHideDiv( 'rota_1' )">
+                            <ion-icon name="expand"></ion-icon>
+                        </button>
+                    </ion-item-divider>
+                    <div class="rota-content" [hidden]="hide_div_rota_1">
+                        <div class="form-divider">
+                            <p>
+                                <ion-icon outline name="bus"></ion-icon>
+                                <strong>Rota [ Poções - Vitória da Conquista ]:</strong>
+                            </p>
+                        </div>
+                        <ion-list class="form-multi-groups">
+                            <div class="form-divider ponto-divider">
+                                <p class="text-muted"><strong>Poções:</strong></p>
+                            </div>
+                            <ion-item-group class="form-group form-group-multi-fields" reorder="true" (ionItemReorder)="reordenarCampos( $event, 'pontos_pocoes_1')">
+                                <div class="ponto-group" *ngFor="let item of pontos_pocoes_1_form; let pos = index">
+                                    <ion-label>Ponto - {{pos + 1}}</ion-label>
+                                    <ion-item class="textarea-70">
+                                        <ion-input class="ponto" [(ngModel)]="pontos_pocoes_1_model[pos].ponto" placeholder="Ponto* - ex: Jeans Gabriela"></ion-input>
+                                        <ion-input class="bairro" [(ngModel)]="pontos_pocoes_1_model[pos].bairro" placeholder="Bairro - ex: Centro"></ion-input>
+                                        <ion-input class="referencia" [(ngModel)]="pontos_pocoes_1_model[pos].referencia" placeholder="Referência - ex: - Proximo ao Banco do Brasil"></ion-input>
+                                    </ion-item>
+                                    <button ion-button outline small class="button-info remove-item" color="danger" (click)="remover_campo_texto( pos, 'pontos_pocoes_1' )">
+                                        <ion-icon name="remove-circle"></ion-icon>
+                                    </button>
+                                </div>
+                            </ion-item-group>
+                            <div class="form-group add-more-button">
+                                <button ion-button small outline icon-left class="btn btn-right add-more" color="secondary" (click)="adicionar_campo_texto( 'pontos_pocoes_1' )">
+                                    <ion-icon name="add"></ion-icon>
+                                    Adicionar Grupo
+                                </button>
+                            </div>
+                        </ion-list>
+                        <ion-list class="form-multi-groups">
+                            <div class="form-divider ponto-divider">
+                                <p class="text-muted"><strong>Vitória da Conquista:</strong></p>
+                                <p item-end>
+                                    <ion-note>Min: 1 - Max: 20</ion-note>
+                                </p>
+                            </div>
+                            <ion-item-group class="form-group form-group-multi-fields" reorder="true" (ionItemReorder)="reordenarCampos( $event, 'pontos_conquista_1' )">
+                                <div class="ponto-group" *ngFor="let item of pontos_conquista_1_form; let pos = index">
+                                    <ion-label>Ponto - {{pos + 1}}</ion-label>
+                                    <ion-item class="textarea-70">
+                                        <ion-input class="ponto" [(ngModel)]="pontos_conquista_1_model[pos].ponto" placeholder="Ponto* - ex: Jeans Gabriela"></ion-input>
+                                        <ion-input class="bairro" [(ngModel)]="pontos_conquista_1_model[pos].bairro" placeholder="Bairro - ex: Centro"></ion-input>
+                                        <ion-input class="referencia" [(ngModel)]="pontos_conquista_1_model[pos].referencia" placeholder="Referência - ex: - Proximo ao Banco do Brasil"></ion-input>
+                                    </ion-item>
+                                    <button ion-button outline small class="button-info remove-item" color="danger" (click)="remover_campo_texto( pos, 'pontos_conquista_1' )">
+                                        <ion-icon name="remove-circle"></ion-icon>
+                                    </button>
+                                </div>
+                            </ion-item-group>
+                            <div class="form-group add-more-button">
+                                <button ion-button small outline icon-left class="btn btn-right add-more" color="secondary" (click)="adicionar_campo_texto( 'pontos_conquista_1' )">
+                                    <ion-icon name="add"></ion-icon>
+                                    Adicionar Grupo
+                                </button>
+                            </div>
+                        </ion-list>
+                    </div>
+                </ion-card>
+
+                <ion-card class="rota rota-2" *ngIf="onibus.qtd_rotas === '2'">
+
+                    <ion-item-divider class="no-m light ">
+                        <ion-label>
+                            Rota do Onibus - 2
+                        </ion-label>
+                        <button ion-button item-right icon-only clear (click)="toggleShowHideDiv( 'rota_2' )">
+                            <ion-icon name="expand"></ion-icon>
+                        </button>
+                    </ion-item-divider>
+
+                    <div class="rota-content" [hidden]="hide_div_rota_2">
+                        <div class="form-divider">
+                            <p>
+                                <ion-icon outline name="bus"></ion-icon>
+                                <strong>Rota [ Vitória da Conquista - Poções ]:</strong>
+                            </p>
+                        </div>
+
+                        <ion-list class="form-multi-groups">
+                            <div class="form-divider ponto-divider">
+                                <p class="text-muted"><strong>Vitória da Conquista:</strong></p>
+                                <p item-end>
+                                    <ion-note>Min: 1 - Max: 20</ion-note>
+                                </p>
+                            </div>
+                            <ion-item-group class="form-group form-group-multi-fields" reorder="true" (ionItemReorder)="reordenarCampos( $event, 'pontos_conquista_2' )">
+                                <div class="ponto-group" *ngFor="let item of pontos_conquista_2_form; let pos = index">
+                                    <ion-label>Ponto - {{pos + 1}}</ion-label>
+                                    <ion-item class="textarea-70">
+                                        <ion-input class="ponto" [(ngModel)]="pontos_conquista_2_model[pos].ponto" placeholder="Ponto* - ex: Jeans Gabriela"></ion-input>
+                                        <ion-input class="bairro" [(ngModel)]="pontos_conquista_2_model[pos].bairro" placeholder="Bairro - ex: Centro"></ion-input>
+                                        <ion-input class="referencia" [(ngModel)]="pontos_conquista_2_model[pos].referencia" placeholder="Referência - ex: - Proximo ao Banco do Brasil"></ion-input>
+                                    </ion-item>
+                                    <button ion-button outline small class="button-info remove-item" color="danger" (click)="remover_campo_texto( pos, 'pontos_conquista_2' )">
+                                        <ion-icon name="remove-circle"></ion-icon>
+                                    </button>
+                                </div>
+                            </ion-item-group>
+                            <div class="form-group add-more-button">
+                                <button ion-button small outline icon-left class="btn btn-right add-more" color="secondary" (click)="adicionar_campo_texto( 'pontos_conquista_2' )">
+                                    <ion-icon name="add"></ion-icon>
+                                    Adicionar Grupo
+                                </button>
+                            </div>
+                        </ion-list>
+
+                        <ion-list class="form-multi-groups">
+                            <div class="form-divider ponto-divider">
+                                <p class="text-muted"><strong>Poções:</strong></p>
+                                <p item-end>
+                                    <ion-note>Min: 1 - Max: 20</ion-note>
+                                </p>
+                            </div>
+                            <ion-item-group class="form-group form-group-multi-fields" reorder="true" (ionItemReorder)="reordenarCampos( $event, 'pontos_pocoes_2')">
+                                <div class="ponto-group" *ngFor="let item of pontos_pocoes_2_form; let pos = index">
+                                    <ion-label>Ponto - {{pos + 1}}</ion-label>
+                                    <ion-item class="textarea-70">
+                                        <ion-input class="ponto" [(ngModel)]="pontos_pocoes_2_model[pos].ponto" placeholder="Ponto* - ex: Jeans Gabriela"></ion-input>
+                                        <ion-input class="bairro" [(ngModel)]="pontos_pocoes_2_model[pos].bairro" placeholder="Bairro - ex: Centro"></ion-input>
+                                        <ion-input class="referencia" [(ngModel)]="pontos_pocoes_2_model[pos].referencia" placeholder="Referência - ex: - Proximo ao Banco do Brasil"></ion-input>
+                                    </ion-item>
+                                    <button ion-button outline small class="button-info remove-item" color="danger" (click)="remover_campo_texto( pos, 'pontos_pocoes_2' )">
+                                        <ion-icon name="remove-circle"></ion-icon>
+                                    </button>
+                                </div>
+                            </ion-item-group>
+                            <div class="form-group add-more-button">
+                                <button ion-button small outline icon-left class="btn btn-right add-more" color="secondary" (click)="adicionar_campo_texto( 'pontos_pocoes_2' )">
+                                    <ion-icon name="add"></ion-icon>
+                                    Adicionar Grupo
+                                </button>
+                            </div>
+                        </ion-list>
+                        
+                    </div>
+                </ion-card>
+            </div>
+            </div>
+        </section>
+    </ion-content>

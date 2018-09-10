@@ -1,0 +1,83 @@
+<ion-header class="header-page">
+	<ion-navbar color="primary">
+
+		<button ion-button menuToggle start>
+			<ion-icon name="menu"></ion-icon>
+		</button>
+
+		<ion-title>Inicío</ion-title>
+
+		<ion-buttons ion-button end>
+			<!-- <button ion-button icon-only>
+			<ion-icon name="notifications"></ion-icon>
+			</button> -->
+		</ion-buttons>
+
+	</ion-navbar>
+</ion-header>
+
+<ion-content class="page-content">
+
+    <section class="page-content__body">
+
+		<ion-item-divider class="no-mb light">
+
+			<ion-label>
+				Lista de coisas a fazer
+			</ion-label>
+			<button ion-button item-right icon-only clear (click)="atualiza_lista_tarefas( true )">
+				<ion-icon name="refresh"></ion-icon>
+			</button>
+			<button ion-button item-right icon-left (click)="nova_tarefa()">
+				<ion-icon name="add"></ion-icon> <span>Adicionar</span>
+			</button>
+
+		</ion-item-divider>
+
+		<ion-card class="no-mt">
+
+			<ion-spinner [hidden]="spinner" name="dots"></ion-spinner>
+
+			<ion-list class="lista-tarefas list-items">
+
+				<ion-item-group *ngFor="let tarefaGrupo of tarefas">
+
+					<ion-item *ngIf="tarefaGrupo.fechadas.length === 0 && tarefaGrupo.abertas.length === 0">
+						<p>Nenhuma tarefa cadastrada</p>
+					</ion-item>
+
+					<ion-item *ngFor="let tarefa of tarefaGrupo.abertas" [attr.prioridade]="tarefa.prioridade" [attr.status]="tarefa.status">
+						<ion-checkbox (ionChange)="modifica_status_tarefa( tarefa.id, true )"></ion-checkbox>
+						<p item-left class="tarefa-desc">
+							{{tarefa.tarefa}}
+							<small class="tarefa-info">
+							<i icon-left>Por <strong>{{tarefa.nome_autor | uppercase }}</strong> - {{tarefa.data | date:'dd/MM/yyyy'}} - <span class="prioridade {{tarefa.prioridade}}">{{tarefa.prioridade | uppercase }}</span></i>
+							</small>
+						</p>
+						<button ion-button item-right icon-only clear class="button-more" (click)="mostra_acoes_tarefa( tarefa )">
+							<ion-icon name="more"></ion-icon>
+						</button>
+					</ion-item>
+
+					<ion-item *ngFor="let tarefa of tarefaGrupo.fechadas" [attr.prioridade]="tarefa.prioridade" [attr.status]="tarefa.status">
+						<ion-checkbox checked (ionChange)="modifica_status_tarefa( tarefa.id, false )"></ion-checkbox>
+						<p item-left class="tarefa-desc">
+							{{tarefa.tarefa}}
+							<small class="tarefa-info">
+							<i icon-left>Por <strong>{{tarefa.nome_autor | uppercase }}</strong> - {{tarefa.data | date:'dd/MM/yyyy'}} - <span class="prioridade {{tarefa.prioridade}}">{{tarefa.prioridade | uppercase }}</span></i>
+							</small>
+						</p>
+						<button ion-button item-right icon-only clear class="button-more" (click)="mostra_acoes_tarefa( tarefa )">
+							<ion-icon name="more"></ion-icon>
+						</button>
+					</ion-item>
+
+				</ion-item-group>
+
+			</ion-list>
+
+		</ion-card>
+
+    </section>
+
+</ion-content>

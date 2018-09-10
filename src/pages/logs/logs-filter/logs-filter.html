@@ -1,0 +1,45 @@
+<ion-header>
+    <ion-toolbar color="primary">
+
+        <ion-title>
+            Opções de Filtro
+        </ion-title>
+
+        <ion-buttons end>
+            <button ion-button icon-only color="branco" (click)="modal_dismiss()">
+                <ion-icon name="close"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="form">
+
+    <ion-list>
+        <ion-item>
+            <ion-label>Filtrar por: <strong>Ação</strong></ion-label>
+            <ion-select [(ngModel)]="logs_filtros_html_selecionados.acao" placeholder="Informe a Ação">
+                <ng-template ngFor let-filter [ngForOf]="filters.acao">
+                    <ion-option value="{{filter.slug}}">{{filter.title}}</ion-option>
+                </ng-template>
+            </ion-select>
+        </ion-item>
+        <ion-item>
+            <ion-label>Filtrar por: <strong>Objeto</strong></ion-label>
+            <ion-select [(ngModel)]="logs_filtros_html_selecionados.objeto" placeholder="Informe o Objeto">
+                <ng-template ngFor let-filter [ngForOf]="filters.objeto">
+                    <ion-option value="{{filter.slug}}">{{filter.title}}</ion-option>
+                </ng-template>
+            </ion-select>
+        </ion-item>
+    </ion-list>
+
+    <button ion-button outline class="btn btn-block reset" (click)="resetFiltros()">
+        Resetar todos os filtros
+    </button>
+
+    <button ion-button round icon-left class="btn btn-block" (click)="setFiltro()">
+        <ion-icon name="checkmark-circle-outline"></ion-icon> Salvar
+    </button>
+
+</ion-content>

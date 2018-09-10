@@ -1,0 +1,11 @@
+page-motoristas {
+    .segment-ios-info.segment-md ion-segment-button:nth-child(2) {
+        border-right: 0;
+    }
+
+    .list-items {
+        button[status="motorista-aeesp"] ion-label{ border-color: #2AAF74; }
+        button[status="motorista-terceirizado"] ion-label { border-color: #EF9037; }
+    }
+    
+}

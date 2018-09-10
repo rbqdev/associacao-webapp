@@ -1,0 +1,288 @@
+<ion-header>
+    <ion-navbar color="primary">
+
+        <button ion-button menuToggle start>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+
+        <ion-title>Ônibus e Rotas</ion-title>
+
+    </ion-navbar>
+</ion-header>
+
+<ion-content class="page-content">
+
+    <section class="page-content__body">
+
+        <ion-card class="informacoes-gerais">
+            <ion-item-divider class="no-m light">
+                <ion-label>
+                    Avisos gerais dos onibus
+                </ion-label>
+                <button ion-button item-right icon-only clear (click)="atualiza_informacoes_gerais( true )">
+                    <ion-icon name="refresh"></ion-icon>
+                </button>
+                <button ion-button item-right icon-left (click)="modal_editar_informacoes_gerais()">
+                    <ion-icon name="create"></ion-icon>Editar
+                </button>
+            </ion-item-divider>
+            <div class="obs-onibus">
+                <ion-spinner [hidden]="spinner_info_geral" name="dots"></ion-spinner>
+                    <p *ngIf="informacoes_gerais.length === 0">Nenhum aviso cadastrado</p>
+                <ul>
+                    <li *ngFor="let informacao of informacoes_gerais.informacoes">
+                        <p>{{informacao}}</p>
+                    </li>
+                </ul>
+            </div>
+            <!-- <div class="info-bottom">
+                <ion-item>
+                <ion-note item-end item-left>
+                    <ion-icon name="calendar"></ion-icon>
+                    Ultima alteração - {{informacoes_gerais.post_modified | date:'yMdjm' }} por <strong>Victor</strong>
+                </ion-note>
+                </ion-item>
+                <button ion-item item-right (click)="modal_visualizacoes_associados()">
+                <ion-note item-end>
+                    <ion-icon name="eye"></ion-icon>
+                    Visualizado por
+                    <strong>260</strong> Associados
+                </ion-note>
+                </button>
+                <p item-left><small>Informações alteradas dia 19/07/2017 por Victor</small></p>
+                <p item-right class="vizualizado">
+                <ion-icon item-left name="eye"></ion-icon><small>87 Visualizações</small>
+                </p>
+            </div> -->
+        </ion-card>
+
+        <ion-card class="onibus-list-container">
+
+            <ion-fab bottom right>
+                <button ion-fab (click)="adicionar_onibus()"><ion-icon name="bus"></ion-icon></button>
+            </ion-fab>
+
+            <ion-item-divider class="no-m light">
+                <ion-label>
+                    Lista dos Onibus/Rotas
+                </ion-label>
+                <button ion-button item-right icon-only clear (click)="atualiza_lista_onibus( true )">
+                    <ion-icon name="refresh"></ion-icon>
+                </button>
+                <button ion-button item-right icon-left (click)="adicionar_onibus()">
+                    <ion-icon name="bus"></ion-icon>Adicionar
+                </button>
+            </ion-item-divider>
+
+            <section class="list-items">
+
+                <ion-segment [(ngModel)]="segment_onibus" class="bg-light">
+                    <ion-segment-button value="matutino">
+                        Matutino
+                    </ion-segment-button>
+                    <ion-segment-button value="vespertino">
+                        Vespertino
+                    </ion-segment-button>
+                    <ion-segment-button value="noturno">
+                        Noturno
+                    </ion-segment-button>
+                </ion-segment>
+
+                <ion-spinner [hidden]="spinner_onibus" name="dots"></ion-spinner>
+
+                <ion-list>
+
+                    <ion-item-group *ngIf="segment_onibus ==='matutino'" name="dots">
+
+                        <ion-item-divider class="border-t">
+                            <ion-label>
+                                Segunda à Sexta
+                            </ion-label>
+                        </ion-item-divider>
+
+                        <ion-item *ngIf="onibusContagem.matutino.semanal === 0">
+                            <p>Nenhum onibus cadastrado para esse encargo neste turno</p>
+                        </ion-item>
+
+                        <div class="lista-onibus-matutino-semanal" *ngFor="let onibus of onibusLista">
+                            <button ion-item item-block class="onibus-single" [attr.data-status]="onibus.status" (click)="single_onibus(onibus)" *ngIf="onibusContagem.matutino.semanal !== 0 && onibus.turno === 'matutino' && onibus.encargo === 'semanal'">
+                                <ion-avatar item-left>
+                                    <ion-icon name="bus"></ion-icon>
+                                    <i class="status"></i>
+                                </ion-avatar>
+                                <h2>{{ onibus.title | uppercase}}</h2>
+                                <p>
+                                    <small>{{onibus.turno | uppercase}}</small>
+                                </p>
+                                <div item-right>
+                                    <p>
+                                        <small><i>Ultima alteração dia {{ onibus.data_modificado }}</i></small>
+                                    </p>
+                                </div>
+                            </button>
+                        </div>
+
+                        <ion-item-divider class="sabado">
+                            <ion-label>
+                                Sábado
+                            </ion-label>
+                        </ion-item-divider>
+
+                        <ion-item *ngIf="onibusContagem.matutino.sabado === 0">
+                            <p>Nenhum onibus cadastrado para esse encargo neste turno</p>
+                        </ion-item>
+
+                        <div class="lista-onibus-matutino-sabado" *ngFor="let onibus of onibusLista">
+                            <button ion-item item-block class="onibus-single" [attr.data-status]="onibus.status" (click)="single_onibus(onibus)" *ngIf="onibusContagem.matutino.sabado !== 0 && onibus.turno === 'matutino' && onibus.encargo === 'sabado'">
+                                <ion-avatar item-left>
+                                    <ion-icon name="bus"></ion-icon>
+                                    <i class="status"></i>
+                                </ion-avatar>
+                                <h2>{{ onibus.title | uppercase}}</h2>
+                                <p>
+                                    <small>{{onibus.turno | uppercase}}</small>
+                                </p>
+                                <div item-right>
+                                    <p>
+                                        <small><i>Ultima alteração dia {{ onibus.data_modificado }}</i></small>
+                                    </p>
+                                </div>
+                            </button>
+                        </div>
+
+                    </ion-item-group>
+
+                    <ion-item-group *ngIf="segment_onibus ==='vespertino'">
+
+                        <ion-item-divider class="border-t">
+                            <ion-label>
+                                Segunda à Sexta
+                            </ion-label>
+                        </ion-item-divider>
+
+                        <ion-item *ngIf="onibusContagem.vespertino.semanal === 0">
+                            <p>Nenhum onibus cadastrado para esse encargo neste turno</p>
+                        </ion-item>
+
+                        <div class="lista-onibus-vespertino-semanal" *ngFor="let onibus of onibusLista">
+
+                            <button ion-item item-block class="onibus-single" [attr.data-status]="onibus.status" (click)="single_onibus(onibus)" *ngIf="onibusContagem.vespertino.semanal !== 0 && onibus.turno === 'vespertino' && onibus.encargo === 'semanal'">
+                                <ion-avatar item-left>
+                                    <ion-icon name="bus"></ion-icon>
+                                    <i class="status"></i>
+                                </ion-avatar>
+                                <h2>{{ onibus.title | uppercase}}</h2>
+                                <p>
+                                    <small>{{onibus.turno | uppercase}}</small>
+                                </p>
+                                <div item-right>
+                                    <p>
+                                        <small><i>Ultima alteração dia {{ onibus.data_modificado }}</i></small>
+                                    </p>
+                                </div>
+                            </button>
+                        </div>
+
+                        <ion-item-divider class="sabado">
+                            <ion-label>
+                                Sábado
+                            </ion-label>
+                        </ion-item-divider>
+
+                        <ion-item *ngIf="onibusContagem.vespertino.sabado === 0">
+                            <p>Nenhum onibus cadastrado para esse encargo neste turno</p>
+                        </ion-item>
+
+                        <div class="lista-onibus-vespertino-sabado" *ngFor="let onibus of onibusLista">
+                            <button ion-item item-block class="onibus-single" [attr.data-status]="onibus.status" (click)="single_onibus(onibus)" *ngIf="onibusContagem.vespertino.sabado !== 0 && onibus.turno === 'vespertino' && onibus.encargo === 'sabado'">
+                                <ion-avatar item-left>
+                                    <ion-icon name="bus"></ion-icon>
+                                    <i class="status"></i>
+                                </ion-avatar>
+                                <h2>{{ onibus.title | uppercase}}</h2>
+                                <p>
+                                    <small>{{onibus.turno | uppercase}}</small>
+                                </p>
+                                <div item-right>
+                                    <p>
+                                        <small><i>Ultima alteração dia {{ onibus.data_modificado }}</i></small>
+                                    </p>
+                                </div>
+                            </button>
+                        </div>
+
+                    </ion-item-group>
+
+                    <ion-item-group *ngIf="segment_onibus ==='noturno'">
+
+                        <ion-item-divider class="border-t">
+                            <ion-label>
+                                Segunda à Sexta
+                            </ion-label>
+                        </ion-item-divider>
+
+                        <ion-item *ngIf="onibusContagem.noturno.semanal === 0">
+                            <p>Nenhum onibus cadastrado para esse encargo neste turno</p>
+                        </ion-item>
+
+                        <div class="lista-onibus-matutino-semanal" *ngFor="let onibus of onibusLista">
+
+                            <button ion-item item-block class="onibus-single" [attr.data-status]="onibus.status" (click)="single_onibus(onibus)" *ngIf="onibusContagem.noturno.semanal !== 0 && onibus.turno === 'noturno' && onibus.encargo === 'semanal'">
+                                <ion-avatar item-left>
+                                    <ion-icon name="bus"></ion-icon>
+                                    <i class="status"></i>
+                                </ion-avatar>
+                                <h2>{{ onibus.title | uppercase}}</h2>
+                                <p>
+                                    <small>{{onibus.turno | uppercase}}</small>
+                                </p>
+                                <div item-right>
+                                    <p>
+                                        <small><i>Ultima alteração dia {{ onibus.data_modificado }}</i></small>
+                                    </p>
+                                </div>
+                            </button>
+
+                        </div>
+
+                        <ion-item-divider class="sabado">
+                            <ion-label>
+                                Sábado
+                            </ion-label>
+                        </ion-item-divider>
+
+                        <ion-item *ngIf="onibusContagem.noturno.sabado === 0">
+                            <p>Nenhum onibus cadastrado para esse encargo neste turno</p>
+                        </ion-item>
+
+                        <div class="lista-onibus-matutino-semanal" *ngFor="let onibus of onibusLista">
+
+                            <button ion-item item-block class="onibus-single" [attr.data-status]="onibus.status" (click)="single_onibus (onibus)" *ngIf="onibusContagem.noturno.sabado !== 0 && onibus.turno === 'noturno' && onibus.encargo === 'sabado'">
+                                <ion-avatar item-left>
+                                    <ion-icon name="bus"></ion-icon>
+                                    <i class="status"></i>
+                                </ion-avatar>
+                                <h2>{{ onibus.title | uppercase}}</h2>
+                                <p>
+                                    <small>{{onibus.turno | uppercase}}</small>
+                                </p>
+                                <div item-right>
+                                    <p>
+                                        <small><i>Ultima alteração dia {{ onibus.data_modificado }}</i></small>
+                                    </p>
+                                </div>
+                            </button>
+
+                        </div>
+
+                    </ion-item-group>
+
+                </ion-list>
+
+            </section>
+
+        </ion-card>
+
+    </section>
+
+</ion-content>

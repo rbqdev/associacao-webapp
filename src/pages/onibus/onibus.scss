@@ -1,0 +1,102 @@
+page-onibus {}
+
+.informacoes-gerais {
+    .obs-onibus {
+        padding: 10px;
+        ul {
+            margin: 5px 0 0;
+            padding: 0 20px 0;
+            li {
+                font-weight: 500;
+                margin-bottom: 8px;
+                padding-bottom: 8px;
+                border-bottom: 1px solid #eee;
+                &:last-child {
+                    border-bottom: 0;
+                    padding-bottom: 0;
+                    margin-bottom: 0;
+                }
+            }
+        }
+    }
+}
+
+.onibus-list-container {
+    ion-list-header {
+        border: 0;
+        border-bottom: 1px solid #dedede;
+    }
+}
+
+.list-items {
+    // margin-top: 5px;
+    ion-item-divider {
+        width: 100%;
+        margin: 15px 0 0;
+        .label {
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: #172B4D;
+        }
+        p {
+            color: #172B4D;
+        }
+    }
+    ion-avatar {
+        width: 40px;
+        height: 40px;
+        ion-icon {
+            font-size: 2.8rem;
+        }
+    }
+    
+    .onibus-single {
+        border-bottom: 1px solid #dedede;
+        &[data-status="onibus_ativo"] {
+            .status {
+                background: #2AAF74;
+            }
+        }
+        &[data-status="onibus_inativo"] {
+            // opacity: 0.5;
+            // cursor: not-allowed;
+            .status {
+                background: #e7505a;
+            }
+        }
+        p {
+            color: #000;
+            margin: 0;
+            strong {
+                font-weight: 500;
+            }
+            span,
+            small {
+                color: #707070;
+            }
+        }
+    }
+}
+
+.page-content__body {
+    .segment-header-container {
+        border-bottom: 2px solid #ccc;
+    }
+}
+
+.info-bottom {
+    border-top: 1px solid #eee;
+    background-color: #fcfcfc;
+    display: flex;
+    .item {
+        min-height: 2em;
+        background: transparent;
+    }
+    .note {
+        color: #707070;
+        .icon {
+            margin-right: 5px;
+            vertical-align: top;
+        }
+    }
+}

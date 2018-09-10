@@ -1,0 +1,52 @@
+page-associados-filter {
+
+    ion-list {
+        padding: 20px 20px 0;
+    }
+
+    .form-modal .item.item-block .item-inner {
+        border-bottom: 1px solid #eee !important;
+    }
+
+    ion-item[filter] .label {
+        text-transform: capitalize;
+    }
+
+    ion-item[filter] .dot {
+        height: 10px;
+        display: inline-block;
+        width: 10px;
+        border-radius: 5px;
+        margin-right: 10px;
+    }
+
+    ion-item[filter="todos"] .dot {
+        background-color: #2e64c3;
+    }
+    ion-item[filter="regular"] .dot {
+        background-color: #2AAF74;
+    }
+    ion-item[filter="inadimplente"] .dot {
+        background-color: #DC3737;
+    }
+    ion-item[filter="pendente"] .dot {
+        background-color: #EF9037;
+    }
+    ion-item[filter="negociacao"] .dot {
+        background-color: #8600c9;
+    }
+    ion-item[filter="isento"] .dot {
+        background-color: #00bcc9;
+    }
+    ion-item[filter="desassociado"] .dot {
+        background-color: #999;
+    }
+
+    .reset-filters {
+        text-align: center;
+    }
+
+    .form .btn.reset {
+        min-width: inherit;
+    }
+}

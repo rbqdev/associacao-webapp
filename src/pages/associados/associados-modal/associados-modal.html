@@ -1,0 +1,268 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-title>
+            {{title_page}}
+        </ion-title>
+        <ion-buttons end>
+            <button ion-button icon-only color="branco" (click)="modal_dismiss()">
+                <ion-icon name="close"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="form-modal">
+
+    <p class="alert-required"><small>Campos com <span class="obrigatorio">*</span> são obrigatórios.</small></p>
+    <section class="form form-associado form-fixed">
+
+        <ion-item class="form-group">
+            <ion-label class="col-2">Nome <span class="obrigatorio">*</span></ion-label>
+            <ion-input type="text" [(ngModel)]="associado.nome" placeholder="Nome"></ion-input>
+        </ion-item>
+
+        <div>
+            <p class="text-muted">O email corresponde ao login de acesso para o aplicativo. Por favor, insira um email válido</p>
+            <ion-item class="form-group">
+                <ion-label>Email <span class="obrigatorio">*</span></ion-label>
+                <ion-input type="text" [(ngModel)]="associado.email" placeholder="Email ex: exemplo@gmail.com" disabled="{{campos_desabilitados}}"></ion-input>
+            </ion-item>
+        </div>
+
+        <ion-item class="form-group">
+            <ion-label>CPF <span class="obrigatorio">*</span></ion-label>
+            <ion-input type="tel" [(ngModel)]="associado.cpf" [textMask]="{mask: cpfMask}" placeholder="CPF ex: 000.000.000-00" (ionBlur)="trimLastCharacter()"></ion-input>
+        </ion-item>
+
+        <ion-item class="form-group">
+            <ion-label>RG <span class="obrigatorio">*</span></ion-label>
+            <ion-input type="text" [(ngModel)]="associado.rg" placeholder="RG"></ion-input>
+        </ion-item>
+
+        <ion-item class="form-group">
+            <ion-label>Nº de Matricula da Instituição <span class="obrigatorio">*</span></ion-label>
+            <ion-input type="text" [(ngModel)]="associado.matricula" placeholder="Matricula"></ion-input>
+        </ion-item>
+
+        <ion-item class="form-group">
+            <ion-label>Contato <span class="obrigatorio">*</span></ion-label>
+            <ion-input type="text" [(ngModel)]="associado.contato" [textMask]="{mask: telMask}" placeholder="Contato ex: (00) 00000-0000" (ionBlur)="trimLastCharacter()"></ion-input>
+        </ion-item>
+
+        <ion-item class="form-group">
+            <ion-label>Turno <span class="obrigatorio">*</span></ion-label>
+            <ion-select [(ngModel)]="associado.turno" placeholder="Informe o Turno">
+            <ion-option value="matutino">Matutino</ion-option>
+            <ion-option value="vespertino">Vespertino</ion-option>
+            <ion-option value="noturno">Noturno</ion-option>
+            </ion-select>
+        </ion-item>
+
+        <ion-item-group class="form-group form-button">
+            <ion-item>
+                <ion-label>Curso <span class="obrigatorio">*</span></ion-label>
+                <ion-select [(ngModel)]="associado.curso_id" placeholder="Informe o Curso">
+                <ion-option *ngFor="let curso of cursos" value="{{curso.id}}">{{curso.title}}</ion-option>
+                </ion-select>
+            </ion-item>
+            <button ion-button icon-only small (click)="mostra_acoes_cursos()">
+                <ion-icon name="menu"></ion-icon>
+            </button>
+        </ion-item-group>
+
+        <ion-item class="form-group">
+            <ion-label>Instituição <span class="obrigatorio">*</span></ion-label>
+            <ion-select [(ngModel)]="associado.inst" placeholder="Informe a Instituição">
+            <ion-option value="fainor">FAINOR</ion-option>
+            <ion-option value="ftc">FTC</ion-option>
+            <ion-option value="ifba">IFBA</ion-option>
+            <ion-option value="mauricio-de-nassau">MAURICIO DE NASSAU</ion-option>
+            <ion-option value="santo-agostinho">SANTO AGOSTINHO</ion-option>
+            <ion-option value="uesb">UESB</ion-option>
+            <ion-option value="ufba">UFBA</ion-option>
+            </ion-select>
+        </ion-item>
+
+        <ion-item class="form-group">
+            <ion-label>Onibus <span class="obrigatorio">*</span></ion-label>
+            <ion-select [(ngModel)]="associado.onibus_id" placeholder="Informe o Onibus">
+            <ion-option *ngFor="let onibus of onibus_lista" value="{{onibus.id}}">{{onibus.title +' - '+ onibus.turno | uppercase }}</ion-option>
+            </ion-select>
+        </ion-item>
+
+        <ion-item class="form-group">
+            <ion-label>Status do Associado <span class="obrigatorio">*</span></ion-label>
+            <ion-select [(ngModel)]="associado.status" (ionChange)="verificacao_status($event)" placeholder="Informe o status do associado">
+                <ion-option value="regular">Regular</ion-option>
+                <ion-option value="isento">Isento</ion-option>
+                <ion-option value="inadimplente">Inadimplente</ion-option>
+                <ion-option value="negociacao">Negociação</ion-option>
+                <ion-option value="afastado">Afastado</ion-option>
+                <ion-option value="desassociado">Desassociado</ion-option>
+            </ion-select>
+        </ion-item>
+
+        <ion-item class="form-group" *ngIf="associado.status === 'isento'">
+            <ion-label>Status de Isenção <span class="obrigatorio">*</span></ion-label>
+            <ion-select [(ngModel)]="associado.status_tipo" (ionChange)="verificacao_status($event)" placeholder="Informe a descrição da isenção">
+                <ion-option value="isento-edital">Isento por Edital</ion-option>
+                <ion-option value="isento-servico">Prestador de Serviço</ion-option>
+                <ion-option value="isento-outro">Outro Motivo</ion-option>
+            </ion-select>
+        </ion-item>
+
+        <ion-item class="form-group textarea-70" *ngIf="associado.status === 'negociacao' || associado.status === 'afastado' || associado.status_tipo === 'isento-outro'">
+            <ion-label *ngIf="associado.status === 'negociacao'">Descrição da Negociação <span class="obrigatorio">*</span></ion-label>
+            <ion-label *ngIf="associado.status === 'afastado'">Descrição do Afastamento <span class="obrigatorio">*</span></ion-label>
+            <ion-label *ngIf="associado.status_tipo === 'isento-outro'">Descrição da isenção <span class="obrigatorio">*</span></ion-label>
+            <ion-textarea [(ngModel)]="associado.status_desc" placeholder="Descreva sobre..."></ion-textarea>
+        </ion-item>
+
+        <ion-item class="form-group" *ngIf="associado.status_tipo === 'isento-servico'">
+            <ion-label>Cargo <span class="obrigatorio">*</span></ion-label>
+            <ion-select [(ngModel)]="associado.cargo_servico" (ionChange)="verificacao_status($event)" placeholder="Informe o tipo do associado">
+                <ion-option value="estagiario">Estagiário(a)</ion-option>
+                <ion-option value="coordenador">Coordenador(a)</ion-option>
+                <ion-option value="conselho_etica">Conselho de Etica</ion-option>
+                <ion-option value="conselho_fiscal">Conselho Fiscal</ion-option>
+                <ion-option value="diretor">Diretor(a)</ion-option>
+            </ion-select>
+        </ion-item>
+
+        <ion-item-group class="form-group" *ngIf="(associado.status === 'isento' && associado.status_tipo === 'isento-servico' ) && ( associado.cargo_servico === 'estagiario' || associado.cargo_servico === 'diretor' )">
+            <ion-label>Administrador do sistema?</ion-label>
+            <div class="form-group-childs">
+                <ion-item>
+                    <ion-checkbox [(ngModel)]="associado.admin"></ion-checkbox>
+                </ion-item>
+            </div>
+        </ion-item-group>
+
+        <!-- <ion-item class="form-group">
+            <ion-label>
+                Data cadastro Sistema (Auto) <span class="obrigatorio">*</span>
+            </ion-label>
+            <ion-datetime displayFormat="DD/MM/YYYY" pickerFormat="DD/MM/YYYY" [(ngModel)]="associado.data_registro_sis" disabled="true"></ion-datetime>
+            <ion-icon name="calendar" item-right></ion-icon>
+        </ion-item>
+
+        <ion-item class="form-group">
+            <ion-label>
+                Data cadastro Associação <span class="obrigatorio">*</span>
+            </ion-label>
+            <ion-datetime displayFormat="DD/MM/YYYY" pickerFormat="DD/MM/YYYY" min="1990" [(ngModel)]="associado.data_registro_assoc" min="1980" disabled="{{campos_desabilitados}}"></ion-datetime>
+            <ion-icon name="calendar" item-right></ion-icon>
+        </ion-item> -->
+
+        <ion-item-group class="form-group">
+            <ion-label>
+                Quais dias da semana ultiliza o serviço? <span class="obrigatorio">*</span>
+            </ion-label>
+            <div class="form-group-childs">
+                <ion-item>
+                    <ion-label>Segunda-Feira</ion-label>
+                    <ion-checkbox [(ngModel)]="associado.dias_da_semana.segunda"></ion-checkbox>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Terça-Feira</ion-label>
+                    <ion-checkbox [(ngModel)]="associado.dias_da_semana.terca"></ion-checkbox>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Quarta-Feira</ion-label>
+                    <ion-checkbox [(ngModel)]="associado.dias_da_semana.quarta"></ion-checkbox>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Quinta-Feira</ion-label>
+                    <ion-checkbox [(ngModel)]="associado.dias_da_semana.quinta"></ion-checkbox>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Sexta-Feira</ion-label>
+                    <ion-checkbox [(ngModel)]="associado.dias_da_semana.sexta"></ion-checkbox>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Sábado</ion-label>
+                    <ion-checkbox [(ngModel)]="associado.dias_da_semana.sabado"></ion-checkbox>
+                </ion-item>
+            </div>
+        </ion-item-group>
+
+        <ion-item-group class="form-group" *ngIf="requisicao === 'adicionar'">
+            <ion-label>
+                Adicionar um foto
+            </ion-label>
+            <div class="form-group-childs form-group-files">
+                <div class="form-group-file">
+                    <input type="file" id="foto-associado" class="imagem" accept=".png,.jpg" (change)="console_imagem( 'foto-associado' )" accept="image/*" />
+                    <label ion-button icon-left for="foto-associado">
+                        <ion-icon name="image" item-left></ion-icon>
+                        Escolha uma imagem
+                    </label>
+                </div>
+            </div>
+        </ion-item-group>
+
+        <div *ngIf="requisicao === 'editar'">
+            <p class="text-muted">Marque a caixa caso deseje alterar a foto deste associado</p>
+            <ion-item-group class="form-group">
+                <ion-label>Alterar foto?</ion-label>
+                <div class="form-group-childs">
+                    <ion-item>
+                        <ion-checkbox [(ngModel)]="alterarFoto"></ion-checkbox>
+                    </ion-item>
+                </div>
+            </ion-item-group>
+            <ion-item-group class="form-group" *ngIf="alterarFoto">
+                <ion-label>
+                    Adicionar uma nova foto
+                </ion-label>
+                <div class="form-group-childs form-group-files">
+                    <div class="form-group-file">
+                        <input type="file" id="foto-associado" class="imagem" accept=".png,.jpg" (change)="console_imagem( 'foto-associado' )" accept="image/*" />
+                        <label ion-button icon-left for="foto-associado">
+                            <ion-icon name="image" item-left></ion-icon>
+                            Escolha uma imagem
+                        </label>
+                    </div>
+                </div>
+            </ion-item-group>
+        </div>
+
+        <div *ngIf="requisicao === 'adicionar' && associado.admin === true">
+            <p class="text-muted">Senha de acesso ao sistema e/ou aplicativo do associado. (Gerada automaticamente)</p>
+            <ion-item class="form-group">
+                <ion-label>Senha <span class="obrigatorio">*</span></ion-label>
+                <ion-input [(ngModel)]="associado.senha" type="password"></ion-input>
+            </ion-item>
+        </div>
+
+        <div *ngIf="requisicao === 'editar' && associado.admin === true">
+            <p class="text-muted">Marque a caixa caso deseje alterar a senha deste associado</p>
+            <ion-item-group class="form-group">
+                <ion-label>Alterar senha?</ion-label>
+                <div class="form-group-childs">
+                    <ion-item>
+                        <ion-checkbox [(ngModel)]="alterarSenha" (ionChange)="gerar_senha_aleatoria()"></ion-checkbox>
+                    </ion-item>
+                </div>
+            </ion-item-group>
+            <ion-item-group class="form-group form-button" *ngIf="alterarSenha === 'true' || alterarSenha === true">
+                <ion-item>
+                    <ion-label>Nova Senha <span class="obrigatorio">*</span></ion-label>
+                    <ion-input [(ngModel)]="senhaAlterada" type="password"></ion-input>
+                </ion-item>
+                <!-- <button ion-button icon-left small (click)="gerar_senha_aleatoria()">
+                    <ion-icon name="refresh"></ion-icon>
+                    Gerar senha
+                </button> -->
+            </ion-item-group>
+        </div>
+
+        <div class="button-fixed">
+            <button ion-button round icon-left class="btn btn-block" (click)="salvar(associado)">
+                <ion-icon name="checkmark-circle-outline"></ion-icon>
+                Salvar
+            </button>
+        </div>
+
+    </section>
+</ion-content>

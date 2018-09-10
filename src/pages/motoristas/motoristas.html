@@ -1,0 +1,178 @@
+<ion-header>
+    <ion-navbar color="primary">
+        <button ion-button menuToggle start>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>Motoristas</ion-title>
+        <ion-buttons ion-button end>
+            <!-- <button ion-button item-right icon-only clear (click)="atualiza_lista_motoristas( true )">
+                <ion-icon name="refresh"></ion-icon>
+                </button> -->
+            <!-- <button ion-button icon-only color="light">
+                <ion-icon name="notifications"></ion-icon>
+            </button> -->
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+<ion-content class="page-content">
+    <ion-fab bottom right>
+        <button ion-fab (click)="modal_adicionar_motorista()">
+            <ion-icon name="person-add"></ion-icon>
+        </button>
+    </ion-fab>
+    <section class="page-content__body">
+        <ion-card class="no-mb">
+            <ion-item-divider class="no-m light">
+                <ion-label>
+                    Lista de Motoristas
+                </ion-label>
+                <button ion-button item-right icon-only clear (click)="atualiza_lista_motoristas( true )">
+                    <ion-icon name="refresh"></ion-icon>
+                </button>
+                <button ion-button item-right icon-left (click)="modal_adicionar_motorista()">
+                    <ion-icon name="person-add"></ion-icon>
+                    Adicionar
+                </button>
+            </ion-item-divider>
+            <ion-segment [(ngModel)]="segment" class="bg-light">
+                <ion-segment-button value="ativos">Ativos</ion-segment-button>
+                <ion-segment-button value="inativos">Inativos</ion-segment-button>
+            </ion-segment>
+        </ion-card>
+        <ion-card class="list-items">
+            <ion-spinner [hidden]="spinner" name="dots"></ion-spinner>
+            <ion-list>
+                <ion-item-group *ngFor="let grupo of motoristasGrupos">
+
+                    <div *ngIf="segment === 'ativos'">
+
+                        <div *ngFor="let grupo of grupo.ativos">
+                            <button *ngFor="let motorista of grupo.aeesp" [attr.status]="motorista.tipo" ion-item item-block (click)="single_motorista(motorista)">
+                                <ion-avatar *ngIf="motorista.foto === ''" item-left>
+                                    <ion-icon name="person"></ion-icon>
+                                </ion-avatar>
+                                <ion-avatar *ngIf="motorista.foto !== ''" item-left>
+                                    <img src="{{ motorista.foto_thumb }}" alt="Thumbnail Motorista"/>
+                                </ion-avatar>
+                                <h2>{{motorista.nome}}</h2>
+                                <p>
+                                    <span>
+                                        <ion-icon name="bus"></ion-icon>
+                                        {{motorista.tipo | removeHifen}}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span>
+                                        <ion-icon name="school"></ion-icon>
+                                        {{motorista.inst_1 | removeHifen }}
+                                    </span>
+                                    <span class="pointer">•</span>
+                                    <span>
+                                        <ion-icon name="time"></ion-icon>
+                                        {{motorista.turno_1}}
+                                    </span>
+                                </p>
+                                <p *ngIf="motorista.qtdTurnos === '2' && motorista.inst_2 !== '' && motorista.turno_2 !== ''">
+                                    <span>
+                                            <ion-icon name="school"></ion-icon>
+                                        {{motorista.inst_2 | removeHifen }}
+                                    </span>
+                                    <span class="pointer">•</span>
+                                    <span>
+                                        <ion-icon name="time"></ion-icon>
+                                        {{motorista.turno_2}}
+                                    </span>
+                                </p>
+                            </button>
+                            <button *ngFor="let motorista of grupo.contratado" [attr.status]="motorista.tipo" ion-item item-block (click)="single_motorista(motorista)">
+                                <ion-avatar *ngIf="motorista.foto === ''" item-left>
+                                    <ion-icon name="person"></ion-icon>
+                                </ion-avatar>
+                                <ion-avatar *ngIf="motorista.foto !== ''" item-left>
+                                    <img src="{{ motorista.foto_thumb }}" alt="Thumbnail Motorista"/>
+                                </ion-avatar>
+                                <h2>{{motorista.nome}}</h2>
+                                <p>
+                                    <span>
+                                        <ion-icon name="bus"></ion-icon>
+                                        {{motorista.tipo | removeHifen}}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span>
+                                        <ion-icon name="school"></ion-icon>
+                                        {{motorista.inst_1 | removeHifen }}
+                                    </span>
+                                    <span class="pointer">•</span>
+                                    <span>
+                                        <ion-icon name="time"></ion-icon>
+                                        {{motorista.turno_1}}
+                                    </span>
+                                </p>
+                                <p *ngIf="motorista.qtdTurnos === '2' && motorista.inst_2 !== '' && motorista.turno_2 !== ''">
+                                    <span>
+                                        <ion-icon name="school"></ion-icon>
+                                        {{motorista.inst_2 | removeHifen }}
+                                    </span>
+                                    <span class="pointer">•</span>
+                                    <span>
+                                        <ion-icon name="time"></ion-icon>
+                                        {{motorista.turno_2}}
+                                    </span>
+                                </p>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Segment Ativos -->
+
+                    <div *ngIf="segment === 'inativos'">
+
+                        <ion-item *ngIf="grupo.inativos.length === 0">
+                            <p>Nenhum motorista inativo</p>
+                        </ion-item>
+                        <button *ngFor="let motorista of grupo.inativos" [attr.status]="inativo" ion-item item-block (click)="single_motorista(motorista)">
+                            <ion-avatar *ngIf="motorista.foto === ''" item-left>
+                                <ion-icon name="person"></ion-icon>
+                            </ion-avatar>
+                            <ion-avatar *ngIf="motorista.foto !== ''" item-left>
+                                <img src="{{ motorista.foto_thumb }}" alt="Thumbnail Motorista"/>
+                            </ion-avatar>
+                            <h2>{{motorista.nome}}</h2>
+                            <p>
+                                <span>
+                                    <ion-icon name="bus"></ion-icon>
+                                    {{motorista.tipo | removeHifen}}
+                                </span>
+                            </p>
+                            <p>
+                                <span>
+                                    <ion-icon name="school"></ion-icon>
+                                    {{motorista.inst_1 | removeHifen }}
+                                </span>
+                                <span class="pointer">•</span>
+                                <span>
+                                    <ion-icon name="time"></ion-icon>
+                                    {{motorista.turno_1}}
+                                </span>
+                            </p>
+                            <p *ngIf="motorista.qtdTurnos === '2' && motorista.inst_2 !== '' && motorista.turno_2 !== ''">
+                                <span>
+                                        <ion-icon name="school"></ion-icon>
+                                    {{motorista.inst_2 | removeHifen }}
+                                </span>
+                                <span class="pointer">•</span>
+                                <span>
+                                    <ion-icon name="time"></ion-icon>
+                                    {{motorista.turno_2}}
+                                </span>
+                            </p>
+                        </button>
+                    </div>
+                    <!-- Segment Inativos -->
+
+                </ion-item-group>
+            </ion-list>
+        </ion-card>
+    </section>
+
+</ion-content>

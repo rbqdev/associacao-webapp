@@ -1,0 +1,196 @@
+<ion-header>
+
+    <ion-navbar color="primary">
+        <ion-title>{{onibus.title +' - '+ onibus.turno | uppercase}}</ion-title>
+
+        <ion-buttons ion-button end>
+            <button ion-button icon-left color="light" (click)="editar_onibus()">
+        <ion-icon name="create"></ion-icon> Editar
+      </button>
+        </ion-buttons>
+    </ion-navbar>
+
+</ion-header>
+
+
+<ion-content class="page-content">
+
+    <section class="page-content__body">
+
+        <ion-item-divider sticky class="message message-alert" *ngIf="onibus.status === 'onibus_inativo'">
+            <p>Este onibus está inativo no momento</p>
+        </ion-item-divider>
+
+        <ion-card class="rota-container">
+
+            <ion-list>
+
+                <ion-item-divider class="no-m light">
+                    <ion-label>
+                        Rota e informações do onibus
+                    </ion-label>
+                    <!--<button ion-button item-right icon-left> <ion-icon name="create"></ion-icon>Editar</button>-->
+                </ion-item-divider>
+
+                <div class="informacoes-onibus">
+
+                    <div class="info-divider informacoes">
+                        <p>
+                            <ion-icon outline name="information-circle"></ion-icon><strong>Informações:</strong>
+                        </p>
+                        <ul>
+                            <li>
+                                <span>Turno: </span><strong>{{ onibus.turno | uppercase }}</strong>
+                            </li>
+                            <li>
+                                <span>Encargo do Onibus: </span><strong>{{ onibus.encargo | uppercase  }}</strong>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="info-divider informacoes">
+                        <p>
+                            <ion-icon outline name="alert"></ion-icon><strong>Avisos deste onibus:</strong>
+                        </p>
+                        <ul>
+                            <li *ngIf="onibus.avisos.length === 0 || (onibus.avisos.length === 1 && onibus.avisos[0] === '')">
+                                <p>Nenhum aviso cadastrado</p>
+                            </li>
+                            <ng-template ngFor let-aviso [ngForOf]="onibus.avisos">
+                                <li *ngIf="aviso != ''">
+                                    <p>{{ aviso }}</p>
+                                </li>
+                            </ng-template>
+                        </ul>
+                    </div>
+                    <div class="info-divider contatos">
+                        <p>
+                            <ion-icon outline name="call"></ion-icon><strong>Contatos:</strong></p>
+                        <ul>
+                            <li *ngFor="let contato of onibus.contatos">
+                                <span>{{ contato.id_contato }}:</span> <strong>{{ contato.contato }}</strong>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="info-divider horario">
+                        <p>
+                            <ion-icon outline name="time"></ion-icon><strong>Horários:</strong></p>
+                        <ul>
+                            <li>Saída de Poções: <strong>{{ onibus.hora_saida }}</strong></li>
+                            <li>Retorno de Vitória da Conquista: <strong>{{ onibus.hora_retorno }}</strong></li>
+                        </ul>
+                    </div>
+
+                    <!--Rota Inicio-->
+                    <div class="info-divider">
+                        <p>
+                            <ion-icon outline name="bus"></ion-icon><strong>Rota do Onibus:</strong></p>
+                        <ul>
+                            <li *ngIf="onibus.qtd_rotas === '1'"><strong>1 Rota:</strong> Este onibus possui apenas 1 rota, que se aplica tanto para a "IDA" quanto para a "VOLTA".</li>
+                            <li *ngIf="onibus.qtd_rotas === '2'"><strong>2 Rotas:</strong> Este onibus possui 2 rotas, uma rota de "IDA", e, outra rota de "VOLTA". Por favor, tenha atenção, e olhe os dois segmentos.</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-divider onibus-timeline-segment" *ngIf="onibus.qtd_rotas === '2'">
+
+                        <ion-segment class="segment-header segment-ios-info" [(ngModel)]="segment_rota_2">
+                            <ion-segment-button value="ida">
+                                Ida
+                            </ion-segment-button>
+                            <ion-segment-button value="volta">
+                                Volta
+                            </ion-segment-button>
+                        </ion-segment>
+                    </div>
+
+                </div>
+
+                <div class="onibus-timeline" *ngIf="segment_rota_2 === 'ida'">
+
+                    <div class="onibus-timeline-divider">
+                        <span>Poções</span>
+                    </div>
+
+                    <div class="entry pocoes" *ngFor="let pontos of onibus.rota_1.pontos_pocoes">
+
+                        <div class="title">
+                            <h3 class="ponto">{{ pontos.ponto }}</h3>
+                            <p class="bairro">{{ pontos.bairro }}</p>
+                        </div>
+                        <div class="body">
+                            <ng-template [ngIf]="pontos.referencia !== ''">
+                                <strong class="referencia">Referência:</strong>
+                                <p>{{ pontos.referencia }}</p>
+                            </ng-template>
+                        </div>
+                    </div>
+
+                    <div class="onibus-timeline-divider">
+                        <span>Vitória da Conquista</span>
+                    </div>
+
+                    <div class="entry conquista" *ngFor="let pontos of onibus.rota_1.pontos_conquista">
+
+                        <div class="title">
+                            <h3 class="ponto">{{ pontos.ponto }}</h3>
+                            <p class="bairro">{{ pontos.bairro }}</p>
+                        </div>
+                        <div class="body">
+                            <ng-template [ngIf]="pontos.referencia !== ''">
+                                <strong class="referencia">Referência:</strong>
+                                <p>{{ pontos.referencia }}</p>
+                            </ng-template>
+                        </div>
+                    </div>
+
+                </div>
+                <!--timline-->
+
+                <div class="onibus-timeline" *ngIf="segment_rota_2 === 'volta'">
+
+                    <div class="onibus-timeline-divider">
+                        <span>Vitória da Conquista</span>
+                    </div>
+
+                    <div class="entry conquista" *ngFor="let pontos of onibus.rota_2.pontos_conquista">
+
+                        <div class="title">
+                            <h3 class="ponto">{{ pontos.ponto }}</h3>
+                            <p class="bairro">{{ pontos.bairro }}</p>
+                        </div>
+                        <div class="body">
+                            <ng-template [ngIf]="pontos.referencia !== ''">
+                                <strong class="referencia">Referência:</strong>
+                                <p>{{ pontos.referencia }}</p>
+                            </ng-template>
+                        </div>
+                    </div>
+
+                    <div class="onibus-timeline-divider">
+                        <span>Poções</span>
+                    </div>
+
+                    <div class="entry pocoes" *ngFor="let pontos of onibus.rota_2.pontos_pocoes">
+
+                        <div class="title">
+                            <h3 class="ponto">{{ pontos.ponto }}</h3>
+                            <p class="bairro">{{ pontos.bairro }}</p>
+                        </div>
+                        <div class="body">
+                            <ng-template [ngIf]="pontos.referencia !== ''">
+                                <strong class="referencia">Referência:</strong>
+                                <p>{{ pontos.referencia }}</p>
+                            </ng-template>
+                        </div>
+                    </div>
+
+                </div>
+                <!--timline-->
+
+            </ion-list>
+
+        </ion-card>
+
+    </section>
+
+</ion-content>

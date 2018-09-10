@@ -1,0 +1,37 @@
+<ion-content>
+
+    <section class="login-container" >
+
+        <div class="login-content">
+
+            <div class="form-header">
+                <h1>AEESP</h1>
+                <p>Sistema de gerenciamento da Associação de Ensino Superior de Poções</p>
+            </div>
+
+            <form (submit)="login()">
+                <ion-list>
+                    <ion-item>
+                        <ion-label floating>Usuário</ion-label>
+                        <ion-input type="text" [(ngModel)]="usuario.username" name="username" spellcheck="false" autocapitalize="off"
+					></ion-input>
+                    </ion-item>
+
+                    <ion-item>
+                        <ion-label floating>Senha</ion-label>
+                        <ion-input type="password" [(ngModel)]="usuario.password" name="password" spellcheck="false" autocapitalize="off"
+					></ion-input>
+                    </ion-item>
+
+                    <div class="submit-button">
+                        <button ion-button round color="primary" block>Entrar</button>
+                    </div>
+                </ion-list>
+            </form>
+            <div class="esqueceu-senha">
+                <a href="#" alt="Esqueceu a Senha">Esqueceu a Senha?</a>
+            </div>
+        </div>
+    </section>
+</ion-content>
+

@@ -1,0 +1,118 @@
+<ion-header class="header-page">
+    <ion-navbar color="primary">
+        <button ion-button menuToggle start>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>Associados</ion-title>
+        <ion-buttons ion-button end> 
+            <button ion-button item-right icon-only clear (click)="pesquisarAssociados()">
+                <ion-icon name="search"></ion-icon>
+            </button>
+            <button ion-button item-right icon-only clear (click)="modalFiltrarAssociados()">
+                <ion-icon name="funnel"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+
+<ion-content class="page-content">
+
+    <ion-fab bottom right>
+        <button ion-fab (click)="modalAdicionarAssociado()">
+            <ion-icon name="person-add"></ion-icon>
+        </button>
+    </ion-fab>
+
+    <section class="page-content__body">
+        <ion-card class="no-mb">
+            <ion-item-divider class="no-m light brd-b">
+                <ion-label>
+                    Lista de associados
+                </ion-label>
+
+                <button ion-button item-right icon-only clear (click)="atualizaListaAssociados( true )">
+                    <ion-icon name="refresh"></ion-icon>
+                </button>
+                <button ion-button item-right icon-left (click)="modalAdicionarAssociado()">
+                    <ion-icon name="person-add"></ion-icon>
+                    Adicionar
+                </button>
+            </ion-item-divider>
+            <ion-item-divider class="no-m light brd-b filter-divider">
+                <ng-template [ngIf]="filtros.status && filtros.status !== ''">
+                    <button icon-right class="filter-button" (click)="removeFiltro('status')">
+                        {{filtros.status | removeHifen }} <ion-icon name="close"></ion-icon>
+                    </button>
+                </ng-template>
+                <ng-template [ngIf]="filtros.inst && filtros.inst !== ''">
+                    <button icon-right class="filter-button" (click)="removeFiltro('inst')">
+                        {{filtros.inst | removeHifen }} <ion-icon name="close"></ion-icon>
+                    </button>
+                </ng-template>
+                <ng-template [ngIf]="filtros.turno && filtros.turno !== ''">
+                    <button icon-right class="filter-button" (click)="removeFiltro('turno')">
+                        {{filtros.turno | removeHifen }} <ion-icon name="close"></ion-icon>
+                    </button>
+                </ng-template>
+                <ng-template [ngIf]="filtros.curso && filtros.curso !== ''">
+                    <button icon-right class="filter-button" (click)="removeFiltro('curso')">
+                        {{filtros.curso | removeHifen }} <ion-icon name="close"></ion-icon>
+                    </button>
+                </ng-template>
+                <ng-template [ngIf]="termoPesquisado">
+                    <button icon-right class="filter-button" (click)="removeTermoPesquisa()">
+                        Pesquisa por: "{{ termoPesquisado }}" <ion-icon name="close"></ion-icon>
+                    </button>
+                </ng-template>
+            </ion-item-divider>
+        </ion-card>
+
+        <ion-card class="list-items">
+            <ion-spinner [hidden]="spinner" name="dots"></ion-spinner>
+            <ion-list>
+                <ion-item *ngIf="associadosGrupos.length === 0 && spinner === true">
+                    <p>Nenhum associado cadastrado</p>
+                </ion-item>
+                <button *ngFor="let associado of associadosGrupos"  [hidden]="associado.hide == true" [attr.status]="associado.status" ion-item item-block (click)="singlePageAssociado(associado)">
+                    <ion-avatar *ngIf="associado.foto === ''" item-left>
+                        <ion-icon name="person"></ion-icon>
+                        <i class="status {{associado.status}}"></i>
+                    </ion-avatar>
+                    <ion-avatar *ngIf="associado.foto !== ''" item-left>
+                        <img src="{{ associado.foto_thumb }}" alt="{{associado.nome}}"/>
+                        <i class="status {{associado.status}}"></i>
+                    </ion-avatar>
+                    <h2>{{associado.nome}}</h2>
+                    <p>
+                        <span>
+                            <ion-icon name="home"></ion-icon>
+                            {{associado.inst | removeHifen}}
+                        </span>
+                        <span class="pointer">•</span>
+                        <span>
+                            <ion-icon name="school"></ion-icon>
+                            {{associado.curso_slug | removeHifen}}
+                        </span>
+                        <span class="pointer">•</span>
+                        <span>
+                            <ion-icon name="time"></ion-icon>
+                            {{associado.turno}}
+                        </span>
+                    </p>
+                    <p item-right class="admin-info" *ngIf="associado.admin">
+                        <span>Admin</span>
+                    </p>
+                </button>
+            </ion-list>
+
+            <ion-infinite-scroll (ionInfinite)="scrollInfinite($event)" *ngIf="carregouTodosRegistros === false">
+                <ion-infinite-scroll-content
+                    loadingText="Buscando associados..."
+                    loadingSpinner="dots">
+                </ion-infinite-scroll-content>
+            </ion-infinite-scroll>
+        </ion-card>
+
+    </section>
+
+</ion-content>

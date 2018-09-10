@@ -1,0 +1,45 @@
+<ion-header>
+
+  <ion-navbar color="primary">
+
+    <ion-title>{{title_modal}}</ion-title>
+
+     <ion-buttons end>
+      <button ion-button icon-only color="branco" (click)="modal_dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content class="form-modal">
+
+    <!-- Formulario de Documentos -->
+    <section *ngIf="requisicao_modal === 'tarefa'" class="form form-tarefa">
+        
+        <ion-item class="form-group textarea-70">
+            <ion-label>Descrição da Tarefa:</ion-label>
+            <ion-textarea [(ngModel)]="tarefa.tarefa" placeholder="Descreva a tarefa..."></ion-textarea>
+        </ion-item>
+
+        <ion-item-group class="form-group form-group-select">
+					<ion-item>
+						<ion-label>Prioridade:</ion-label>
+						<ion-select [(ngModel)]="tarefa.prioridade">
+							<ion-option value="alta">Alta</ion-option>
+							<ion-option value="media">Media</ion-option>
+							<ion-option value="baixa">Baixa</ion-option>
+						</ion-select>
+					</ion-item>
+          <span class="prioridade {{tarefa.prioridade}}"></span>
+        </ion-item-group>
+
+        <button ion-button round icon-left class="btn btn-block" (click)="salvar(tarefa)">
+            <ion-icon name="checkmark-circle-outline"></ion-icon> Salvar
+        </button>
+    </section>
+ 
+</ion-content>

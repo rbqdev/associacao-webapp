@@ -1,0 +1,53 @@
+<ion-split-pane when="lg">
+
+    <ion-menu side="left" id="leftMenu" class="main-menu" [content]="content">
+        <ion-header>
+            <ion-toolbar color="dark">
+                <ion-title class="menu-title" hidden>Sistema Aeesp</ion-title>
+                <img src="../system/assets/logo.png" alt="Logo Sistema" class="logo" />
+            </ion-toolbar>
+        </ion-header>
+
+        <ion-content>
+
+             <header class="usuario-dados">
+                <ion-item>
+                    <span class="avatar-letter">{{ first_letter }}</span>
+                    <h3 class="nome">{{usuario.nome}}</h3>
+                </ion-item>
+            </header>
+
+            <ion-list>
+
+                <ion-item-divider >Principal</ion-item-divider>
+                <button menuClose ion-item *ngFor="let page of pagesPrincipais" [class.currentPage]="checaPaginaAtual(page)" (click)="openPage(page)">
+                    <ion-icon item-left name={{page.icon}} ></ion-icon>
+                    {{page.title}}
+                </button>
+                <!-- <ion-item-divider >Informações Publicas</ion-item-divider> -->
+                <button menuClose ion-item *ngFor="let page of pagesPublicas" [class.currentPage]="checaPaginaAtual(page)" (click)="openPage(page)">
+                    <ion-icon item-left name={{page.icon}} ></ion-icon>
+                    {{page.title}}
+                </button>
+                <!-- <ion-item-divider>Relatórios e Avisos</ion-item-divider>
+                <button menuClose ion-item *ngFor="let page of pagesEstatisticas" [class.currentPage]="checaPaginaAtual(page)" (click)="openPage(page)">
+                    <ion-icon item-left name={{page.icon}} ></ion-icon>
+                    {{page.title}}
+                </button> -->
+                <!-- <ion-item-divider>Configurações</ion-item-divider> -->
+                <button menuClose ion-item *ngFor="let page of pagesConfiguracoes" [class.currentPage]="checaPaginaAtual(page)" (click)="openPage(page)">
+                    <ion-icon item-left name={{page.icon}} ></ion-icon>
+                    {{page.title}}
+                </button>
+                <button menuClose ion-item (click)="logout()">
+                    <ion-icon item-left name="exit" ></ion-icon>
+                    Sair
+                </button>
+                <small>Versão 1.0</small>
+            </ion-list>
+        </ion-content>
+    </ion-menu>
+
+    <ion-nav [root]="rootPage" #content main></ion-nav>
+
+</ion-split-pane>

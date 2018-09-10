@@ -1,0 +1,535 @@
+// Geral
+.page-content__header {
+    background: #fff;
+    >div {
+        margin-bottom: 15px;
+    }
+    ion-item {
+        padding: 0;
+    }
+    .item-inner {
+        border-bottom: 0 !important;
+    }
+    ion-avatar {
+        background: #eee;
+        padding: 14px;
+        ion-icon {
+            font-size: 3rem;
+        }
+    }
+}
+
+
+/* 
+    Segment: Informacoes
+*/
+
+.page-content__body {
+    .row {
+        &.row-avatar {
+            background: #fff;
+            padding: 20px 50px;
+            border-bottom: 1px solid #eee;
+            h1 {
+                font-size: 3rem;
+                margin-bottom: 10px;
+                padding-bottom: 5px;
+                border-bottom: 1px solid #eee;
+            }
+            .item {
+                background: transparent;
+                padding: 0;
+                width: auto;
+                &.header-info {
+                    -webkit-box-flex: 1;
+                    -ms-flex: 1;
+                    flex: 1;
+                    ion-label {
+                        white-space: normal;
+                    }
+                    .info {
+                        display: -webkit-box;
+                        display: -ms-flexbox;
+                        display: flex;
+                        -webkit-box-align: center;
+                        -ms-flex-align: center;
+                        align-items: center;
+                        text-align: right;
+                        text-transform: uppercase;
+                        margin-bottom: 0;
+                        ion-icon {
+                            margin: 0 3px 0 0;
+                        }
+                        span {
+                            font-size: 1.1rem;
+                            letter-spacing: 0.4px;
+                            strong {
+                                font-size: 0.9rem;
+                            }
+                        }
+                        .icon {
+                            vertical-align: text-top;
+                        }
+                        .pointer {
+                            margin: 0 8px;
+                        }
+                    }
+                    .status-desc p {
+                        line-height: 18px;
+                        strong {
+                            font-weight: bold;
+                        }
+                    }
+                }
+                ion-avatar {
+                    margin: 0;
+                    width: 240px;
+                    height: 240px;
+                    background-repeat: repeat;
+                    background-position: center;
+                    background-size: cover;
+                    border-radius: 50%;
+                    border: 1px solid #eee;
+                }
+                .thumb-icon {
+                    width: 180px;
+                    height: 180px;
+                    background: #eee;
+                    border-radius: 50%;
+                    display: -webkit-box;
+                    display: -ms-flexbox;
+                    display: flex;
+                    -webkit-box-pack: center;
+                    -ms-flex-pack: center;
+                    justify-content: center;
+                    -webkit-box-align: center;
+                    -ms-flex-align: center;
+                    align-items: center;
+                    ion-icon {
+                        margin: 0;
+                        font-size: 6rem;
+                    }
+                }
+                img {
+                    width: 150px;
+                    height: 150px;
+                }
+            }
+        }
+        .divider-header {
+            padding: 15px 0 0 16px;
+            margin: 0;
+            width: 100%;
+        }
+        
+        &.row-documentos {
+            .thumb {
+                padding: 10px 16px;
+                width: 50px;
+                height: 50px;
+            }
+        }
+        &.row-advertencias {
+            .grau {
+                span {
+                    color: #fff;
+                    padding: 2px 11px;
+                    font-size: 1rem;
+                    font-weight: bold;
+                    text-transform: uppercase;
+                    border-radius: 2px;
+                    &.baixo {
+                        background: #3570a2;
+                    }
+                    &.alto {
+                        background: #e7505a;
+                    }
+                    &.medio {
+                        background: #EF9037;
+                    }
+                }
+            }
+        }
+        ion-list-header {
+            margin: 0;
+        }
+        ion-icon {
+            vertical-align: top;
+            margin-right: 5px;
+            padding: 0;
+        }
+        .informacoes ion-item .item-inner,
+        .advertencias ion-item .item-inner {
+            border-bottom: 1px solid #eee !important;
+        }
+        .informacoes ion-item:last-child {
+            .item-inner {
+                border: 0 !important;
+            }
+        }
+    }
+    .table-list {
+        width: 100%;
+        &>tbody>tr>td,
+        &>thead>tr>th {
+            padding: 12px 16px;
+            border: 1px solid #e0e0e0;
+            border-top: 0;
+            max-width: 450px;
+        }
+        &>thead>tr>th {
+            padding-top: 8px;
+            padding-bottom: 8px;
+        }
+        .row-list__header {
+            text-align: left;
+            background: #f6f8f8;
+            border-bottom: 1px solid #eee;
+            strong {
+                text-transform: uppercase;
+                font-size: 1.1rem;
+                font-weight: 500;
+            }
+        }
+        .row-list__body {
+            tr {
+                &:hover {
+                    background: #f4f4f4;
+                }
+            }
+            td {
+                text-transform: uppercase;
+                font-size: 1.2rem;
+                &.matricula {
+                    font-weight: bold;
+                }
+                &.advertencia {
+                    text-transform: initial;
+                    font-size: 1.4rem;
+                }
+                &.status {
+                    span {
+                        color: #fff;
+                        padding: 2px 11px;
+                        font-size: 1rem;
+                        font-weight: bold;
+                        text-transform: uppercase;
+                        border-radius: 2px;
+                        &.pago {
+                            background: #2AAF74;
+                        }
+                        &.pendente {
+                            background: #e7505a;
+                        }
+                    }
+                }
+            }
+            .buttons-pago,
+            .acao {
+                .button {
+                    font-size: 1rem;
+                    height: 2.2rem;
+                }
+            }
+            .buttons-pendente {
+                .button-pagar {
+                    padding: 0;
+                    font-size: 1.4rem;
+                }
+            }
+        }
+    }
+    .col-avatar {
+        max-width: 250px;
+        padding: 12px 0 0 12px;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        .thumb-foto,
+        .status-info {
+            border: 1px solid #eee;
+            border-bottom: 0;
+        }
+        .thumb-icon {
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            height: 200px;
+            background: #f4f4f4;
+            ion-icon {
+                font-size: 7rem;
+            }
+        }
+    }
+    .col-informacoes {
+        padding: 15px 0 25px;
+        h1 {
+            color: #4C87B9;
+        }
+        .item:not(first-child) {
+            min-height: inherit;
+            .item-inner {
+                border-bottom: 1px solid #f7f7f7 !important;
+                .label {
+                    margin: 8px 0;
+                }
+            }
+        }
+        ion-item {
+            p {
+                color: #000;
+                margin-bottom: 8px;
+                span {
+                    margin-right: 3px;
+                    color: #707070;
+                    min-width: 170px;
+                    margin-right: 35px;
+                    display: inline-block;
+                }
+                strong {
+                    font-weight: normal;
+                    font-size: 1.5rem;
+                }
+                .cap {
+                    text-transform: capitalize;
+                }
+            }
+            p:last-child {
+                margin: 4px 0;
+            }
+        }
+    }
+    ion-item {
+        p {
+            color: #000;
+            margin-bottom: 8px;
+        }
+    }
+    .col-segments {
+        margin-top: 20px;
+        border-top: 1px solid #eee;
+    }
+    .status-info {
+        .status {
+            margin: 15px 0;
+            * {
+                color: #fff;
+                font-size: 1rem;
+                line-height: 16px;
+            }
+            &[data-status] strong {
+                text-align: center;
+                padding: 4px 40px;
+                margin-bottom: 5px;
+                text-transform: uppercase;
+                border-radius: 20px;
+                margin-right: 12px;
+                letter-spacing: 0.4px;
+                font-weight: 500;
+            }
+            &[data-status="desassociado"] strong {
+                background: #999;
+            }
+            &[data-status="afastado"] strong {
+                background: #2F353B;
+            }
+            &[data-status="associado"] strong,
+            &[data-status="regular"] strong {
+                background: #2AAF74;
+            }
+            &[data-status="inadimplente"] strong {
+                background: #DC3737;
+            }
+            &[data-status="pendente"] strong {
+                background: #EF9037;
+            }
+            &[data-status="negociacao"] strong {
+                background: #8600c9;
+            }
+            &[data-status="isento"] strong {
+                background: #00bcc9;
+            }
+            &[data-status] .admin-info {
+                background: #2f353b;
+            }
+        }
+    }
+    .dias_da_semana {
+        strong[ultiliza-servico="false"] {
+            font-weight: 100;
+            text-decoration: line-through;
+        }
+        strong[ultiliza-servico="true"] {
+            font-weight: bold;
+        }
+    }
+    .item-pago .avatar-icon {
+        color: #2AAF74;
+    }
+    .item-nao-pago {
+        p,
+        .avatar-icon {
+            color: #DC3737;
+        }
+    }
+    .status ion-label,
+    .advertencias ion-label {
+        white-space: normal;
+    }
+}
+
+.advertencias {
+    .item[grau] {
+        border-left: 6px solid;
+        border-bottom: 1px solid #eee;
+        border-right: 2px solid #999;
+        padding-left: 20px;
+        &[grau="alto"] {
+            border-left-color: #DC3737;
+        }
+        &[grau="medio"] {
+            border-left-color: #EF9037;
+        }
+        &[grau="baixo"] {
+            border-left-color: #3977bb;
+        }
+        .item-inner {
+            border: 0 !important;
+        }
+    }
+}
+
+
+/* 
+    Segment: Pagamentos
+*/
+
+.page-content__body {
+    .pag-mes {
+        font-size: 1.3rem;
+    }
+    .comprovante {
+        margin: 15px 0;
+        text-align: center;
+        button {
+            font-size: 1rem;
+        }
+    }
+}
+
+.pagamento-single,
+.documento-single {
+    border-bottom: 1px solid #eee;
+    &:last-child {
+        border: 0;
+    }
+}
+
+.pag-item {
+    border-left: 3px solid;
+    &.item-pago {
+        border-color: #2aaf74;
+    }
+    &.item-nao-pago {
+        border-color: #dc3737;
+    }
+}
+
+.pagamento-single {
+    .avatar-icon {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -ms-flex-line-pack: center;
+        align-content: center;
+        text-align: center;
+        font-size: 2.2rem;
+    }
+    i {
+        font-size: 1.1rem;
+    }
+    &[data-status="matricula"] *:not(ion-icon) {
+        color: #3977bb;
+    }
+    span {
+        vertical-align: middle;
+        padding: 0 2px;
+    }
+}
+
+
+/* 
+   Segment: Documentos
+*/
+
+.documentos {
+    .documento-single {
+        ion-item-sliding>ion-item {
+            border-right: 2px solid #999;
+        }
+        h2 {
+            text-transform: uppercase;
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+        p {
+            margin: 5px 0;
+            letter-spacing: 0.4px;
+            font-size: 1.3rem;
+            font-style: italic;
+        }
+    }
+}
+
+@media screen and ( max-width: 991px) {
+    .page-content__body {
+        .col {
+            -webkit-box-flex: 0;
+            -ms-flex: 0 0 100%;
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+        .col-avatar {
+            padding: 20px 20px 10px;
+            ion-thumbnail {
+                max-width: 250px;
+                margin: 0 auto;
+            }
+        }
+    }
+}
+
+@media screen and ( max-width: 479px) {
+    .page-content__body {
+        .col {
+            -webkit-box-flex: 0;
+            -ms-flex: 0 0 100%;
+            flex: 0 0 100%;
+        }
+        ion-item {
+            ion-label {
+                white-space: inherit;
+            }
+        }
+    }
+}

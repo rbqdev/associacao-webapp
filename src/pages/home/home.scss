@@ -1,0 +1,156 @@
+.color-red,
+.color-red h2 {
+    color: #DC3737;
+}
+.color-green,
+.color-green h2 {
+    color: #2AAF74;
+}
+
+.lista-tarefas {
+
+    padding: 0;
+
+    .icon {
+        vertical-align: text-bottom;
+        margin-right: 5px;
+    }
+
+    .card {
+        padding: 0;
+    }
+
+    .item-divider {
+        margin-top: 10px !important;
+    }
+
+    ion-item-group {
+        ion-list-header.item {
+            border: 0;
+            border-bottom: 1px solid #eee;
+            margin: 0 !important;
+            min-height: inherit;
+
+            ion-label {
+                text-transform: uppercase;
+                color: #999;
+                font-size: 1.1rem;
+                margin: 10px 0;
+            }
+            ion-note {
+                margin: 5px 20px 5px 0;
+            }
+        }
+    }
+
+    .card-content {
+        padding: 0;
+    }
+
+    .item .checkbox {
+        margin-right: 15px;
+    }
+
+    .item-checkbox-checked .item-inner ion-label {
+        text-decoration: line-through;
+    }
+
+    ion-item-sliding > .item {
+        border-right: 1px solid #999;
+    }
+
+    ion-item-options button {
+        margin: 0 !important;
+        height: 100% !important;
+    }
+
+    .item {
+
+        .item-cover,
+        .item-inner {
+            padding: 0;
+        }
+
+        p {
+            color: #333;
+            margin-bottom: 5px;
+            white-space: normal;
+        }
+        .tarefa-desc {
+            margin: 10px 0;
+            padding-right: 65px;
+            flex: 0 0 100%;
+            font-size: 1.3rem;
+            line-height: 18px;
+
+            .tarefa-info {
+                float: left;
+                width: 100%;
+                padding: 5px 0;
+                color: #999;
+                .prioridade {
+                    color: #fff !important;
+                    font-weight: 500;
+                    font-size: 9px;
+                    border-radius: 2px;
+                    padding: 1px 5px;
+                    &.baixa {
+                        background: #2AAF74;
+                    }
+                    &.media {
+                        background: #EF9037;
+                    }
+                    &.alta {
+                        background: #e7505a;
+                    }
+                }
+            }
+
+        }
+
+        .button-more {
+            height: 100%;
+            margin: 0 0 0 5px;
+            padding: 0 15px;
+            position: absolute;
+            right: 0;
+            ion-icon {
+                margin: 0;
+            }
+        }
+
+    }
+
+    .item[status="fechada"] {
+        opacity: 0.5;
+        .tarefa-desc,
+        .tarefa-info {
+            text-decoration: line-through;
+        }
+    }
+    .item[prioridade]{
+        border-left: 5px solid;
+        border-bottom: 1px solid #eee;
+        padding: 0 10px;
+
+        .item-inner {
+            border: 0 !important;
+            justify-content: flex-end;
+            flex: 0 0 18%;
+            max-width: 130px;
+            .input-wrapper {
+                display: none;
+            }
+        }
+    }
+    .item[prioridade="alta"] {
+        border-left-color: #DC3737;
+    }
+    .item[prioridade="media"] {
+        border-left-color: #EF9037;
+    }
+    .item[prioridade="baixa"]{
+        border-left-color: #2AAF74;
+    }
+
+}

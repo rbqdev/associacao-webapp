@@ -1,0 +1,25 @@
+page-motoristas-single {
+
+    .page-content__body {
+        .info {
+            &.mb {
+                margin-bottom: 8px !important;
+            }
+        }
+
+        .status-info {
+            .status {
+                
+                &[data-status="false"] {
+                    background: #2F353B;
+                }
+                &[data-status="true"] {
+                    background: #2AAF74;
+                }
+
+            }
+        }
+    }
+    
+
+}

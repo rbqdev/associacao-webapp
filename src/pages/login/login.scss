@@ -1,0 +1,58 @@
+.login-container {
+    height: 100%;
+    // background: #3977bb;
+    background: #1567C4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.login-container ion-label {
+    font-size: 1.4rem;
+    color: #999 !important;
+}
+.login-container ion-item {
+    padding: 0;
+}
+.login-container .submit-button {
+    margin-top: 30px;
+}
+.login-content {
+    max-width: 600px;
+    width: 100%;
+    background: #fff;
+    padding: 50px;
+}
+
+.login-content .form-header {
+    float: left;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-content .input-has-focus ion-label {
+    color: #3977bb !important;
+}
+
+.login-content .esqueceu-senha {
+    text-align: right;
+}
+
+.login-content .esqueceu-senha a {
+    text-decoration: none;
+}
+
+@media screen and( min-width: 767px ){
+    .login-container {
+        padding: 50px;
+    } 
+}
+@media screen and( max-width: 767px ){
+    .login-container {
+        background: #fff;
+    } 
+    .login-content {
+        padding: 20px;
+        height: 100%;
+    } 
+}

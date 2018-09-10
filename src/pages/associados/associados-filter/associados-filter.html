@@ -1,0 +1,61 @@
+<ion-header>
+    <ion-toolbar color="primary">
+
+        <ion-title>
+            Opções de Filtro
+        </ion-title>
+
+        <ion-buttons end>
+            <button ion-button icon-only color="branco" (click)="modal_dismiss()">
+                <ion-icon name="close"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="form">
+
+	<ion-list>
+		<ion-item>
+			<ion-label>Filtrar por: <strong>Status</strong></ion-label>
+			<ion-select [(ngModel)]="filtros_html_selecionados.status" placeholder="Informe o Status">
+				<ng-template ngFor let-filter [ngForOf]="filters.status">
+					<ion-option value="{{filter.slug}}">{{filter.title}}</ion-option>
+				</ng-template>
+			</ion-select>
+		</ion-item>
+		<ion-item>
+			<ion-label>Filtrar por: <strong>Turno</strong></ion-label>
+			<ion-select [(ngModel)]="filtros_html_selecionados.turno" placeholder="Informe o Turno">
+				<ng-template ngFor let-filter [ngForOf]="filters.turno">
+					<ion-option value="{{filter.slug}}">{{filter.title}}</ion-option>
+				</ng-template>
+			</ion-select>
+		</ion-item>
+		<ion-item>
+			<ion-label>Filtrar por: <strong>Instituição</strong></ion-label>
+			<ion-select [(ngModel)]="filtros_html_selecionados.inst" placeholder="Informe o Instituição">
+				<ng-template ngFor let-filter [ngForOf]="filters.inst">
+					<ion-option value="{{filter.slug}}">{{filter.title}}</ion-option>
+				</ng-template>
+			</ion-select>
+		</ion-item>
+		<ion-item>
+			<ion-label>Filtrar por: <strong>Curso</strong></ion-label>
+			<ion-select [(ngModel)]="filtros_html_selecionados.curso" placeholder="Informe o Curso">
+				<ng-template ngFor let-filter [ngForOf]="filters.curso">
+					<ion-option value="{{filter.slug}}">{{filter.title}}</ion-option>
+				</ng-template>
+			</ion-select>
+		</ion-item>
+	</ion-list>
+
+	<button ion-button outline class="btn btn-block reset" (click)="resetFiltros()">
+		Resetar todos os filtros
+	</button>
+
+	<button ion-button round icon-left class="btn btn-block submit" (click)="setFiltro()">
+		<ion-icon name="checkmark-circle-outline"></ion-icon> Salvar
+	</button>
+
+</ion-content>

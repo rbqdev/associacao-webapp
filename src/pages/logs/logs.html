@@ -1,0 +1,124 @@
+<ion-header class="header-page">
+    <ion-navbar color="primary">
+
+        <button ion-button menuToggle start>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+
+        <ion-title>Log de usuários</ion-title>
+
+        <ion-buttons ion-button end>
+            <button ion-button item-right icon-only clear (click)="pesquisarLogs()">
+                <ion-icon name="search"></ion-icon>
+            </button>
+            <button ion-button item-right icon-only clear (click)="modalFiltrarLogs()">
+                <ion-icon name="funnel"></ion-icon>
+            </button>
+        </ion-buttons>
+
+    </ion-navbar>
+</ion-header>
+
+
+<ion-content class="page-content">
+
+    <section class="page-content__body">
+
+        <ion-card class="logs-container">
+
+            <ion-item-divider class="no-m light brd-b">
+                <ion-label>
+                    Lista de logs
+                </ion-label>
+                <button ion-button item-right icon-only clear (click)="atualiza_lista_logs_usuarios( true )">
+                    <ion-icon name="refresh"></ion-icon>
+                </button>
+            </ion-item-divider>
+            <ion-item-divider class="no-m light brd-b filter-divider">
+                <ng-template [ngIf]="logsFiltros.acao && logsFiltros.acao !== ''">
+                    <button icon-right class="filter-button" (click)="removeFiltro('acao')">
+                        {{logsFiltros.acao | removeHifen }} <ion-icon name="close"></ion-icon>
+                    </button>
+                </ng-template>
+                <ng-template [ngIf]="logsFiltros.objeto && logsFiltros.objeto !== ''">
+                    <button icon-right class="filter-button" (click)="removeFiltro('objeto')">
+                        {{logsFiltros.objeto | removeHifen }} <ion-icon name="close"></ion-icon>
+                    </button>
+                </ng-template>
+            </ion-item-divider>
+
+            <ion-spinner [hidden]="spinner" name="dots"></ion-spinner>
+
+            <div class="logs-content">
+                <div class="table-list-container">
+                    <table class="table-list table-list-logs">
+
+                        <!-- <caption>{{grupoMes.mesName}}</caption> -->
+
+                        <thead class="row-list__header">
+                            <tr>
+                                <th>
+                                    <strong>Autor</strong>
+                                </th>
+                                <th>
+                                    <strong>Ação</strong>
+                                </th>
+                                <th>
+                                    <strong>Objeto</strong>
+                                </th>
+                                <th>
+                                    <strong>Descrição</strong>
+                                </th>
+                                <th>
+                                    <strong>Data</strong>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="row-list__body">
+
+                            <tr *ngFor="let log of logsGrupo" [hidden]="log.hide === true">
+                                <td class="autor">
+                                    <span>{{log.nome_autor}}</span>
+                                </td>
+                                <td class="acao {{log.acao}}">
+                                    <!-- <ion-icon name="create"></ion-icon> -->
+                                    <span>
+                                        <ion-icon name="add" *ngIf="log.acao === 'adicao'"></ion-icon>
+                                        <ion-icon name="create" *ngIf="log.acao === 'edicao'"></ion-icon>
+                                        <ion-icon name="trash" *ngIf="log.acao === 'remocao'"></ion-icon>
+                                        {{log.acao}}
+                                    </span>
+                                </td>
+                                <td class="objeto {{log.objeto}}">
+                                    <!-- <ion-icon name="person"></ion-icon> -->
+                                    <span> {{log.objeto}}</span>
+                                    <span *ngIf="log.objeto_desc !== '' && log.objeto_desc !== null"> / {{log.objeto_desc}}</span>
+                                </td>
+                                <td class="descricao">
+                                    <span>{{log.acao_desc}}</span>
+                                </td>
+                                <td class="data">
+                                    <span>{{log.data | date:'dd/MM/yyyy'}}</span>
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+            <ion-infinite-scroll (ionInfinite)="scrollInfinite($event)" *ngIf="carregouTodosRegistros === false">
+                <ion-infinite-scroll-content
+                    loadingText="Buscando logs de usuários..."
+                    loadingSpinner="dots">
+                </ion-infinite-scroll-content>
+            </ion-infinite-scroll>
+
+        </ion-card>
+
+    </section>
+
+</ion-content>

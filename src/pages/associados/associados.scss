@@ -1,0 +1,275 @@
+.spinner-container {
+    text-align: center;
+    margin: 20px 0;
+}
+
+// Cards
+// .top-card-count {
+//     .card {
+//         margin: 0;
+//         width: 100%;
+//     }
+//     .card-count-content {
+//         padding: 0;
+//         >div {
+//             // width: 100%;
+//             display: flex;
+//             justify-content: flex-end;
+//             align-items: center;
+//             border-bottom: 1px solid #eee;
+//         }
+//         .count-single {
+//             margin: 8px 2px;
+//             padding: 4px 10px;
+//             -webkit-transition: 300ms all ease-in-out;
+//             transition: 300ms all ease-in-out;
+//             .circle {
+//                 width: 10px;
+//                 height: 10px;
+//                 margin-right: 5px;
+//                 border-radius: 50%;
+//                 display: inline-block;
+//                 &.azul {
+//                     background: #3570a2;
+//                 }
+//                 &.azul-dark {
+//                     background: #73a2ca;
+//                 }
+//                 &.azul-claro {
+//                     background: #00bcc9;
+//                 }
+//                 &.verde {
+//                     background: #2AAF74;
+//                 }
+//                 &.vermelho {
+//                     background: #DC3737;
+//                 }
+//                 &.laranja {
+//                     background: #EF9037;
+//                 }
+//                 &.cinza {
+//                     background: #999;
+//                 }
+//                 &.preto {
+//                     background: #333;
+//                 }
+//             }
+//             .label {
+//                 width: 0px;
+//                 font-size: 1.2rem;
+//                 line-height: 20px;
+//                 overflow: hidden;
+//                 text-overflow: ellipsis;
+//                 white-space: nowrap;
+//                 display: inline-block;
+//                 vertical-align: bottom;
+//                 transition: 300ms width ease-in-out;
+//             }
+//             &:hover {
+//                 background: rgb(47, 53, 59);
+//                 border-radius: 2px;
+//                 color: #fff;
+//                 .label {
+//                     width: 100px;
+//                 }
+//             }
+//         }
+//     }
+//     .color-azul {
+//         * {
+//             color: #73a2ca;
+//         }
+//     }
+//     .color-azul-dark {
+//         * {
+//             color: #4C87B9;
+//         }
+//     }
+//     .color-azul-claro {
+//         * {
+//             color: #00bcc9;
+//         }
+//     }
+//     .color-verde {
+//         * {
+//             color: #2AAF74;
+//         }
+//     }
+//     .color-vermelho {
+//         * {
+//             color: #DC3737;
+//         }
+//     }
+//     .color-laranja {
+//         * {
+//             color: #EF9037;
+//         }
+//     }
+//     .color-cinza {
+//         * {
+//             color: #999;
+//         }
+//     }
+//     .color-preto {
+//         * {
+//             color: #333;
+//         }
+//     }
+// }
+
+.filter-divider {
+    
+    .label {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .filter-button {
+        padding: 5px 10px 5px 12px;
+        margin-left: 10px;
+        text-transform: uppercase;
+        background: #172c4d;
+        color: #fff;
+        font-weight: bold;
+        font-size: 1rem;
+        letter-spacing: 0.4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50px;
+    }
+
+    .filter-button .icon {
+        margin: 0 !important;
+    }
+
+}
+
+@media screen and( max-width: 767px) {
+    .top-cards {
+        ion-col[col-3] {
+            max-width: 50%;
+            width: 50%;
+            flex: 0 0 50%;
+        }
+        .card {
+            margin-bottom: 0;
+            align-items: center;
+            display: flex;
+        }
+        .card-content {
+            padding: 0;
+        }
+        .card-text {
+            flex-wrap: wrap;
+            >* {
+                flex: 0 0 100%;
+            }
+            p {
+                font-size: 0.9rem;
+            }
+        }
+        .card-icon {
+            display: none;
+        }
+        h2 {
+            font-size: 1.5rem;
+        }
+    }
+}
+
+.list-items {
+    ion-card {
+        margin: 10px auto;
+    }
+    ion-avatar {
+        height: 55px;
+        width: 55px;
+        min-height: 55px;
+        min-width: 55px;
+        background: #f4f4f4;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        position: relative;
+        img {
+            width: 100%;
+            height: 100%;
+        }
+        ion-icon {
+            font-size: 2.6rem;
+        }
+        .status {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            line-height: 18px;
+            text-align: center;
+            border: 3px solid #fff;
+            border-radius: 50%;
+            bottom: -3px;
+            right: 0;
+            &.regular {
+                background: #2AAF74;
+            }
+            &.negociacao {
+                background: #8600c9;
+            }
+            &.pendente {
+                background: #EF9037;
+            }
+            &.inadimplente {
+                background: #DC3737;
+            }
+            &.isento {
+                background: #00bcc9;
+            }
+            &.afastado {
+                background: #333;
+            }
+            &.desassociado {
+                background: #999;
+            }
+        }
+    }
+    button.item {
+        border-bottom: 1px solid #eee;
+        &:hover {
+            background: #f9f9f9;
+        }
+    }
+    button.item[status="desassociado"] {
+        opacity: 0.5;
+    }
+    ion-item-divider ion-label,
+    p span {
+        text-transform: uppercase;
+    }
+    .item {
+        p span {
+            font-size: 1rem;
+            letter-spacing: 0.4px;
+            ion-icon {
+                font-size: 1.1rem;
+                margin-right: 2px;
+            }
+        }
+        .pointer {
+            vertical-align: text-top;
+            font-size: 1.5rem;
+            margin: 0 6px;
+        }
+        .admin-info {
+            display: flex;
+            margin: 0 10px 0 0;
+            span {
+                color: #fff;
+                background: #2F353B;
+                padding: 2px 12px;
+                font-size: .9rem;
+                border-radius: 20px;
+            }
+        }
+    }
+}

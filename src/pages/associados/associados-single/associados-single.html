@@ -1,0 +1,382 @@
+<ion-header>
+
+    <ion-navbar color="primary">
+        <ion-title>{{associado.nome}}</ion-title>
+    </ion-navbar>
+
+</ion-header>
+
+<ion-content class="page-content">
+
+    <section class="page-content__body">
+
+        <ion-card>
+
+            <ion-grid no-padding>
+
+                <ion-row class="row-header row-avatar" color="dark">
+                    <ion-item>
+                        <ion-avatar *ngIf="associado.foto === ''" class="thumb-icon" item-left>
+                            <ion-icon name="person"></ion-icon>
+                        </ion-avatar>
+                        <ion-avatar *ngIf="associado.foto !== ''" class="thumb-foto" item-left color="bg-light" 
+                        [ngStyle]="{ 'background-image': 'url(' + associado.foto_media + ')' }">
+                        </ion-avatar>
+                    </ion-item>
+                    <ion-item class="header-info">
+                        <h1 class="nome">{{associado.nome}}</h1>
+                        <p class="info">
+                            <span>
+                                <ion-icon name="home"></ion-icon>
+                                {{associado.inst | removeHifen | uppercase}}
+                              </span>
+                            <span class="pointer">•</span>
+                            <span>
+                                <ion-icon name="school"></ion-icon>
+                                {{associado.curso_slug | removeHifen | uppercase}}
+                              </span>
+                            <span class="pointer">•</span>
+                            <span>
+                                <ion-icon name="time"></ion-icon>
+                                {{associado.turno | uppercase}}  
+                              </span>
+                        </p>
+                        <div class="status-info">
+                            <p [attr.data-status]="associado.status" class="status">
+                                <strong>{{associado.status}}</strong>
+                                <strong *ngIf="associado.admin" class="admin-info">Admin</strong>
+                            </p>
+                            <div *ngIf="associado.status === 'isento' || associado.status === 'negociacao' || associado.status === 'afastado'" class="status-desc">
+                                <p *ngIf="associado.status === 'isento' && associado.status_tipo === 'isento-edital'">
+                                    <strong>Descrição da isenção: </strong> Isento pelo Edital
+                                    <!-- <small>Isencão expira em 28/08/2017</small> -->
+                                </p>
+                                <p *ngIf="associado.status === 'isento' && associado.admin === true"><strong>Descrição da isenção: </strong> Isento por prestação de serviço</p>
+                                <p *ngIf="associado.status === 'afastado'"><strong>Descrição do afastamento: </strong>{{associado.status_desc | removeHifen }}</p>
+                                <p *ngIf="associado.status === 'negociacao'"><strong>Descrição da negociação: </strong>{{associado.status_desc | removeHifen }}</p>
+                            </div>
+                        </div>
+                    </ion-item>
+                </ion-row>
+
+                <ion-row class="row-header row-segment bg-light">
+                    <ion-segment [(ngModel)]="segment">
+                        <ion-segment-button value="informacoes">
+                            <ion-icon name="information-circle"></ion-icon>
+                        </ion-segment-button>
+                        <ion-segment-button value="pagamentos" (click)="atualiza_lista_pagamentos()">
+                            <ion-icon name="cash"></ion-icon>
+                        </ion-segment-button>
+                        <ion-segment-button value="documentos" (click)="atualiza_lista_documentos()">
+                            <ion-icon name="document"></ion-icon>
+                        </ion-segment-button>
+                        <ion-segment-button value="advertencias" (click)="atualiza_lista_advertencias()">
+                            <ion-icon name="warning"></ion-icon>
+                        </ion-segment-button>
+                    </ion-segment>
+                </ion-row>
+
+                <ion-row class="row-informacoes" *ngIf="segment === 'informacoes'">
+
+                    <ion-item-divider class="divider-header no-mb light">
+                        <ion-label>
+                            Informações
+                        </ion-label>
+                        <button ion-button item-right icon-only clear (click)="atualiza_informacoes_associado( true )"> 
+                      <ion-icon name="refresh"></ion-icon>
+                    </button>
+                        <button ion-button item-right icon-right (click)="modal_editar_associado(associado)"> 
+                      <ion-icon name="create"></ion-icon>Editar
+                    </button>
+                    </ion-item-divider>
+
+                    <ion-spinner [hidden]="spinner" name="dots"></ion-spinner>
+
+                    <ion-col class="col-informacoes">
+                        <ion-item>
+                            <p><span><ion-icon icon-left name="at"></ion-icon> Email:</span> <strong class="email">{{associado.email}}</strong></p>
+                        </ion-item>
+                        <ion-item>
+                            <p><span><ion-icon icon-left name="call"></ion-icon> Contato:</span> <strong>{{associado.contato}}</strong></p>
+                        </ion-item>
+                        <ion-item>
+                            <p><span><ion-icon icon-left name="paper"></ion-icon> Nº Matricula:</span> <strong>{{associado.matricula}}</strong></p>
+                        </ion-item>
+                        <ion-item>
+                            <p><span><ion-icon icon-left name="paper"></ion-icon> RG:</span> <strong>{{associado.rg}}</strong></p>
+                        </ion-item>
+                        <ion-item>
+                            <p><span><ion-icon icon-left name="paper"></ion-icon> CPF:</span> <strong>{{associado.cpf}}</strong></p>
+                        </ion-item>
+                        <ion-item>
+                            <p><span><ion-icon icon-left name="bus"></ion-icon> Onibus:</span> <strong>{{associado.onibus_title | uppercase}}</strong></p>
+                        </ion-item>
+                        <ion-item class="dias_da_semana">
+                            <p>
+                                <span><ion-icon icon-left name="bus"></ion-icon> Ultiliza o serviço:</span>
+                                <strong>
+                                    <strong [attr.ultiliza-servico]="ultiliza_servico( associado.dias_da_semana.segunda )">Segunda</strong> -
+                                    <strong [attr.ultiliza-servico]="ultiliza_servico( associado.dias_da_semana.terca )">Terça</strong> -
+                                    <strong [attr.ultiliza-servico]="ultiliza_servico( associado.dias_da_semana.quarta )">Quarta</strong> -
+                                    <strong [attr.ultiliza-servico]="ultiliza_servico( associado.dias_da_semana.quinta )">Quinta</strong> -
+                                    <strong [attr.ultiliza-servico]="ultiliza_servico( associado.dias_da_semana.sexta )">Sexta</strong> -
+                                    <strong [attr.ultiliza-servico]="ultiliza_servico( associado.dias_da_semana.sabado )">Sábado</strong>
+                                </strong>
+                            </p>
+                        </ion-item>
+                        <ion-item>
+                            <p><span><ion-icon icon-left name="calendar"></ion-icon> Cadastrado Sistema:</span> <strong class="cap">{{associado.data_registro_sis | date:'dd/MM/yyyy' }}</strong></p>
+                        </ion-item>
+                        <!-- <ion-item>
+                            <p><span><ion-icon icon-left name="calendar"></ion-icon> Cadastrado Associação:</span> <strong class="cap">{{associado.data_registro_assoc | date:'dd/MM/yyyy' }}</strong></p>
+                        </ion-item> -->
+                    </ion-col>
+                </ion-row>
+
+                <ion-row class="row-pagamentos" *ngIf="segment === 'pagamentos'">
+
+                    <ion-item-divider class="divider-header no-mb light">
+                        <ion-label>
+                            Pagamentos
+                            <p *ngIf="contagemPagamentos.pendentes !== 0">
+                                <small>Este associado possui pagamentos pendentes: <strong>{{contagemPagamentos.pendentes}}</strong></small>
+                            </p>
+                        </ion-label>
+                        <!-- <button ion-button item-right icon-only clear> 
+                            <ion-icon name="search"></ion-icon>
+                        </button> -->
+                        <button ion-button item-right icon-only clear (click)="atualiza_lista_pagamentos( true )"> 
+                            <ion-icon name="refresh"></ion-icon>
+                        </button>
+                        <button ion-button item-right icon-left (click)="modal_adicionar_pagamento( associado.id, associado.nome )"> 
+                            <ion-icon name="add"></ion-icon> <span>Novo Pagamento</span>
+                        </button>
+                    </ion-item-divider>
+
+                    <ion-spinner [hidden]="spinner" name="dots"></ion-spinner>
+
+                    <ion-item class="nenhum" *ngIf="pagamentos.length === 0 && spinner === true">
+                        <p>Nenhum pagamento atribudo a este associado</p>
+                    </ion-item>
+
+                    <table class="table-list table-list-pagamentos" *ngIf="pagamentos.length !== 0">
+                        <thead class="row-list__header">
+                            <tr>
+                                <th>
+                                    <strong>Data</strong>
+                                </th>
+                                <th>
+                                    <strong>Ano</strong>
+                                </th>
+                                <th>
+                                    <strong>Mês</strong>
+                                </th>
+                                <th>
+                                    <strong>Tipo</strong>
+                                </th>
+                                <th>
+                                    <strong>Valor</strong>
+                                </th>
+                                <th>
+                                    <strong>Status</strong>
+                                </th>
+
+                                <th>
+                                    <strong>#</strong>
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody class="row-list__body">
+                            <tr *ngFor="let pagamento of pagamentos">
+                                <td class="data">
+                                    <span>{{ pagamento.data_pagamento | date:'dd/MM/yyyy'}}</span>
+                                </td>
+                                <td class="ano">
+                                    <span>{{ pagamento.ano }}</span>
+                                </td>
+                                <td class="mes">
+                                    <span>{{ pagamento.mes }}</span>
+                                </td>
+                                <td class="{{ pagamento.tipo_pagamento }}">
+                                    <span>{{ pagamento.tipo_pagamento }}</span>
+                                </td>
+                                <td class="valor">
+                                    <span>{{ pagamento.valor }}</span>
+                                </td>
+                                <td class="status">
+                                    <span *ngIf="pagamento.pago === 'true'" class="pago">Pago</span>
+                                    <span *ngIf="pagamento.pago === 'false'" class="pendente">Pendente</span>
+                                </td>
+                                <td class="acao">
+                                    <div *ngIf="pagamento.pago === 'true'" class="buttons-pago">
+                                        <button ion-button icon-only clear (click)="ver_comprovante_pagamento( pagamento.img )">
+                                            <ion-icon name="image"></ion-icon>
+                                          </button>
+                                        <button ion-button icon-only clear (click)="modal_editar_pagamento( pagamento )">
+                                            <ion-icon name="create"></ion-icon>
+                                        </button> 
+                                        <!-- <button ion-button icon-only clear color="danger" (click)="deletar_pagamento( pagamento.id )">
+                            <ion-icon name="trash"></ion-icon>
+                          </button>  -->
+                                    </div>
+                                    <div *ngIf="pagamento.pago === 'false'" class="buttons-pendente">
+                                        <button ion-button icon-left clear class="button-pagar" (click)="modal_editar_pagamento( pagamento )">
+                                            Pagar
+                                          </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </ion-row>
+
+                <ion-row class="row-documentos" *ngIf="segment === 'documentos'">
+
+                    <ion-item-divider class="divider-header no-mb light">
+                        <ion-label>
+                            Documentos
+                        </ion-label>
+                        <!-- <button ion-button item-right icon-only clear> 
+                            <ion-icon name="search"></ion-icon>
+                          </button> -->
+                        <button ion-button item-right icon-only clear (click)="atualiza_lista_documentos( true )"> 
+                            <ion-icon name="refresh"></ion-icon>
+                          </button>
+                        <button ion-button item-right icon-left (click)="modal_adicionar_documento( associado.id, associado.nome )"> 
+                            <ion-icon name="add"></ion-icon> <span>Novo Documento</span>
+                          </button>
+                    </ion-item-divider>
+
+                    <ion-spinner [hidden]="spinner" name="dots"></ion-spinner>
+
+                    <ion-item class="nenhum" *ngIf="documentos.length === 0 && spinner === true">
+                        <p>Nenhum documento atribuido a este associado</p>
+                    </ion-item>
+
+                    <table class="row-body table-list table-list-documentos" *ngIf="documentos.length !== 0">
+                        <thead class="row-list__header">
+                            <tr>
+                                <th>
+                                    <strong>Data</strong>
+                                </th>
+                                <th>
+                                    <strong>Tipo</strong>
+                                </th>
+                                <th>
+                                    <strong>Imagem</strong>
+                                </th>
+                                <th>
+                                    <strong>#</strong>
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody class="row-list__body">
+                            <tr *ngFor="let documento of documentos">
+                                <td class="data">
+                                    <span>{{ documento.data | date:'dd/MM/yyyy'}}</span>
+                                </td>
+                                <td class="tipo">
+                                    <span *ngIf="documento.documento_desc === ''">{{ documento.tipo_documento | removeHifen }}</span>
+                                    <span *ngIf="documento.documento_desc !== ''">{{documento.documento_desc}}</span>
+                                </td>
+                                <td class="thumb">
+                                    <ion-thumbnail item-left color="bg-light">
+                                        <img src="{{ documento.img_thumb }}" alt="Thumbnail Documento" />
+                                    </ion-thumbnail>
+                                </td>
+                                <td class="acao">
+                                    <button ion-button icon-only clear (click)="ver_comprovante_documento( documento.img )">
+                                        <ion-icon name="image"></ion-icon>
+                                      </button>
+                                    <button ion-button icon-only clear (click)="modal_editar_documento( documento )">
+                                        <ion-icon name="create"></ion-icon>
+                                      </button>
+                                    <button ion-button icon-only clear color="danger" (click)="deletar_documento( documento.id )">
+                                        <ion-icon name="trash"></ion-icon>
+                                      </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </ion-row>
+
+                <ion-row class="row-advertencias" *ngIf="segment === 'advertencias'">
+
+                    <ion-item-divider class="divider-header no-mb light">
+                        <ion-label>
+                            Advertências
+                        </ion-label>
+                        <button ion-button item-right icon-only clear (click)="atualiza_lista_advertencias( true )"> 
+                      <ion-icon name="refresh"></ion-icon>
+                    </button>
+                        <button ion-button item-right icon-right (click)="modal_nova_advertencia( associado.id, associado.nome )"> 
+                      <ion-icon name="add"></ion-icon> Nova Advertência
+                    </button>
+                    </ion-item-divider>
+
+                    <ion-spinner [hidden]="spinner" name="dots"></ion-spinner>
+
+                    <ion-item class="nenhum" *ngIf="advertencias.length === 0 && spinner === true">
+                        <p>Nenhuma advertência atribuida a este associado</p>
+                    </ion-item>
+
+                    <table class="table-list table-list-advertencias" *ngIf="advertencias.length !== 0">
+
+                        <thead class="row-list__header">
+                            <tr>
+                                <th>
+                                    <strong>Data</strong>
+                                </th>
+                                <th>
+                                    <strong>Autor</strong>
+                                </th>
+                                <th>
+                                    <strong>Advertência</strong>
+                                </th>
+                                <th>
+                                    <strong>Grau</strong>
+                                </th>
+                                <th>
+                                    <strong>#</strong>
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody class="row-list__body">
+                            <tr *ngFor="let advertencia of advertencias">
+                                <td class="data">
+                                    <span>{{ advertencia.data | date:'dd/MM/yyyy' }}</span>
+                                </td>
+                                <td class="autor">
+                                    <span>{{ advertencia.nome_autor }}</span>
+                                </td>
+                                <td class="advertencia">
+                                    <span>{{ advertencia.advertencia }}</span>
+                                </td>
+                                <td class="grau">
+                                    <span class="{{ advertencia.grau }}">{{ advertencia.grau }}</span>
+                                </td>
+                                <td class="acao">
+                                    <button ion-button icon-only clear (click)="modal_editar_advertencia( advertencia )">
+                          <ion-icon name="create"></ion-icon>
+                        </button>
+                                    <button ion-button icon-only clear color="danger" (click)="deletar_advertencia( advertencia.id )">
+                          <ion-icon name="trash"></ion-icon>
+                        </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </ion-row>
+
+            </ion-grid>
+        </ion-card>
+
+    </section>
+
+</ion-content>
